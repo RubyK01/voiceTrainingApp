@@ -43,7 +43,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment:2.5.3")
     implementation("androidx.navigation:navigation-ui:2.5.3")
-
+    implementation ("com.android.support:support-annotations:28.0.0")
     //jTransforms
     implementation ("com.github.wendykierp:JTransforms:3.1")
 

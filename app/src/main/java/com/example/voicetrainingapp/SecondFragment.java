@@ -1,6 +1,7 @@
 package com.example.voicetrainingapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -65,12 +66,12 @@ public class SecondFragment extends Fragment {
                                 audioRecorder.stopRecording();
                                 isRecording = false;
                                 File audioFile = new File(audioRecorder.getAudioFilePath());
-                                double frequency = 0;
-                                frequency = frequencyAnalyzer.calculateFrequency(audioFile);
-                                hzText.setText("Hz: " + frequency);
+                                double frequency = frequencyAnalyzer.calculateFrequency(audioFile);
+                                String formattedFrequency = String.format("%.2f", frequency);
+                                hzText.setText("Hz: " + formattedFrequency);
                                 Double dB = 20 * Math.log10(frequency);
-                                dBText.setText("dB: " + dB);
-
+                                String formattedDB = String.format("%.2f", dB);
+                                dBText.setText("dB: " + formattedDB);
                             }
                         }
                     }.start();
@@ -95,6 +96,13 @@ public class SecondFragment extends Fragment {
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
         });
+
+        Button buttonThird = view.findViewById(R.id.button_third); // Ensure this button is in your fragment_second layout
+        buttonThird.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SesionGraph.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
