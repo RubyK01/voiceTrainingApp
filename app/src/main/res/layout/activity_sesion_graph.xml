@@ -3,17 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SesionGraph">
+    tools:context=".SesionGraph"
+    xmlns:ap="http://schemas.androidplot.com/ap">
 
     <!-- Graph View with adjusted width and alignment -->
     <com.androidplot.xy.XYPlot
+        style="@style/APDefacto.Light"
         android:id="@+id/sessionGraph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_alignParentTop="true"
         android:layout_above="@+id/bottomLayout"
-        android:layout_margin="20dp" />
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp" />
 
     <!-- Bottom Bar with Back Button -->
     <LinearLayout

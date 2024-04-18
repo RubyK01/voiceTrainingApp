@@ -2,19 +2,17 @@ package com.example.voicetrainingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextPaint;
 import android.view.View;
 import android.widget.Button;
-import android.support.annotation.NonNull;
-
-import com.androidplot.util.PixelUtils;
+import com.androidplot.xy.FillDirection;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
-
-import java.text.Format;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
+import com.androidplot.xy.XYSeries;
+import java.util.Arrays;
 
 public class SesionGraph extends AppCompatActivity {
 
@@ -22,57 +20,43 @@ public class SesionGraph extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sesion_graph);
-
+        //Average minimum and maximum for masculine and feminine vocal frequencies
+        int masculineMin = 85;
+        int masculineMax = 180;
+        int feminineMin = 165;
+        int feminineMax = 255;
         XYPlot plot = findViewById(R.id.sessionGraph);
+        // arrays to hold the min and max ranges
+        Number[] masculineRange = {masculineMin, masculineMin};
+        Number[] feminineRange = {feminineMin, feminineMin};
 
-        // Assuming you have set up your series data here
+        XYSeries masculineSeries = new SimpleXYSeries(
+                Arrays.asList(masculineRange),
+                SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,
+                "Masc Range");
 
-        // Customize domain (bottom) and range (side) labels
-        plot.setDomainLabel("Time (s)");
-        plot.setRangeLabel("Frequency (Hz)");
+        XYSeries feminineSeries = new SimpleXYSeries(
+                Arrays.asList(feminineRange),
+                SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,
+                "Fem Range");
 
-        // Get domain and range label widgets and their corresponding TextPaint
-        TextPaint domainLabelPaint = plot.getDomainLabelWidget().getLabelPaint();
-        TextPaint rangeLabelPaint = plot.getRangeLabelWidget().getLabelPaint();
+// Create formatters for the ranges that use transparent shading
+        LineAndPointFormatter masculineFormatter = new LineAndPointFormatter();
+        masculineFormatter.getLinePaint().setColor(Color.TRANSPARENT); // Hide the line
+        masculineFormatter.getFillPaint().setAlpha(50); // Semi-transparent shading
+        masculineFormatter.setFillDirection(FillDirection.BOTTOM);
 
-        // Set text size for domain and range labels
-        float textSizeInPixels = PixelUtils.spToPix(16); // Example to set text size to 16sp
-        domainLabelPaint.setTextSize(textSizeInPixels);
-        rangeLabelPaint.setTextSize(textSizeInPixels);
+        LineAndPointFormatter feminineFormatter = new LineAndPointFormatter();
+        feminineFormatter.getLinePaint().setColor(Color.TRANSPARENT); // Hide the line
+        feminineFormatter.getFillPaint().setAlpha(50); // Semi-transparent shading
+        feminineFormatter.setFillDirection(FillDirection.BOTTOM);
 
-        // Customize how the labels are displayed
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
-            @Override
-            public StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, @NonNull FieldPosition pos) {
-                // Format the domain labels as you want them to appear
-                Number num = (Number) obj;
-                toAppendTo.append(String.format("%.1f", num.floatValue()));
-                return toAppendTo;
-            }
-
-            @Override
-            public Object parseObject(String source, @NonNull ParsePosition pos) {
-                return null;
-            }
-        });
-
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new Format() {
-            @Override
-            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                if (obj instanceof Number) {
-                    Number num = (Number) obj;
-                    toAppendTo.append(String.format("%.2f", num.doubleValue())); // Format to 2 decimal places
-                }
-                return toAppendTo;
-            }
-
-            @Override
-            public Object parseObject(String source, ParsePosition pos) {
-                return null; // No parsing needed for this example
-            }
-        });
-
-        // Update the plot with the new settings
+// Add the series to the plot with their formatters
+        plot.addSeries(masculineSeries, masculineFormatter);
+        plot.addSeries(feminineSeries, feminineFormatter);
+        plot.setTitle("Pitch Over Time");
+        plot.setDomainLabel("Duration (15 seconds)");
+        plot.setRangeLabel("Pitch (Hz)");
         plot.redraw();
 
 

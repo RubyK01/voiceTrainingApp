@@ -21,7 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.voicetrainingapp.databinding.FragmentSecondBinding;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class SecondFragment extends Fragment {
 
@@ -30,8 +30,8 @@ public class SecondFragment extends Fragment {
     private static final int RECORD_AUDIO_PERMISSION_REQUEST_CODE = 123;
     private boolean isRecording = false;
     private FrequencyAnalyzer frequencyAnalyzer;
-    private int currentRecordingCount = 0;
-
+    ArrayList<Double> frequencyResults = new ArrayList<Double>();
+    ArrayList<Double> decibalResults = new ArrayList<Double>();
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -45,7 +45,6 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         Button recordButton = view.findViewById(R.id.recordButton);
         TextView hzText = view.findViewById(R.id.hzText);
         TextView dBText = view.findViewById(R.id.dBText);
@@ -65,23 +64,31 @@ public class SecondFragment extends Fragment {
                             if (isRecording) {
                                 audioRecorder.stopRecording();
                                 isRecording = false;
+                                //Grabbing the file path of the .wav that gets created.
                                 File audioFile = new File(audioRecorder.getAudioFilePath());
+                                //https://stackoverflow.com/questions/11701399/round-up-to-2-decimal-places-in-java
+                                //Sending the filepath into the frequency calculation method
                                 double frequency = frequencyAnalyzer.calculateFrequency(audioFile);
-                                String formattedFrequency = String.format("%.2f", frequency);
-                                hzText.setText("Hz: " + formattedFrequency);
+                                //Rounding the result to two decimal places
+                                Double roundedFrequency = Math.round(frequency * 100.0) / 100.0;
+                                hzText.setText("Hz: " + roundedFrequency);
                                 Double dB = 20 * Math.log10(frequency);
-                                String formattedDB = String.format("%.2f", dB);
-                                dBText.setText("dB: " + formattedDB);
+                                Double roundedDB = Math.round(dB * 100.0) / 100.0;
+                                dBText.setText("dB: " + roundedDB);
+
+                                frequencyResults.add(roundedFrequency);
+                                decibalResults.add(roundedDB);
                             }
                         }
                     }.start();
                     isRecording = true;
                     audioRecorder.startRecording();
+                    int currentRecordingCount = 0;
+                    currentRecordingCount++;
                 } else {
                     audioRecorder.stopRecording();
                     isRecording = false;
                     recordButton.setText("Start Recording");
-                    // Optionally stop the countdown here if you keep a reference to the CountDownTimer
                 }
             } else {
                 requestRecordAudioPermission();
@@ -89,7 +96,7 @@ public class SecondFragment extends Fragment {
         });
 
 
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        binding.buttonSecond.setOnClickListener(new View.OnClickListener() { // Button to go back to the home screen.
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SecondFragment.this)
@@ -97,7 +104,7 @@ public class SecondFragment extends Fragment {
             }
         });
 
-        Button buttonThird = view.findViewById(R.id.button_third); // Ensure this button is in your fragment_second layout
+        Button buttonThird = view.findViewById(R.id.button_third); // Making the results button direct user to the graph screen
         buttonThird.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SesionGraph.class);
             startActivity(intent);
