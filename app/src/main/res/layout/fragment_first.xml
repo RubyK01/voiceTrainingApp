@@ -17,10 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="testing to see if text changes"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_first"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/button_first" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button_first"
@@ -54,10 +55,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Button 4"
-            app:layout_constraintTop_toBottomOf="@id/button_third"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_third"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

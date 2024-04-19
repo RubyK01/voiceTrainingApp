@@ -22,24 +22,28 @@ import com.example.voicetrainingapp.databinding.FragmentSecondBinding;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
-    private AudioRecorder audioRecorder;
+    private AudioRecorder audioRecorder;// Instance of AudioRecoder
     private static final int RECORD_AUDIO_PERMISSION_REQUEST_CODE = 123;
-    private boolean isRecording = false;
-    private FrequencyAnalyzer frequencyAnalyzer;
-    ArrayList<Double> frequencyResults = new ArrayList<Double>();
-    ArrayList<Double> decibalResults = new ArrayList<Double>();
+    private boolean isRecording = false;//Used to check if the microphone is recording
+    FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();//Instance of frequencyAnalyzer
+    ArrayList<Double> frequencyResults = new ArrayList<Double>(); //ArrayList to hold the over all average as its the average of the three averages from the below arraylists.
+    ArrayList<Double> firstSoundResults = new ArrayList<Double>(); //holds the frequencies for the first sound.
+    ArrayList<Double> secondSoundResults = new ArrayList<Double>(); //holds the frequencies for the second sound.
+    ArrayList<Double> thirdSoundResults = new ArrayList<Double>();//holds the frequencies for the third sound.
+    ArrayList<Double> decibalResults = new ArrayList<Double>();//Holds the average dB results
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
-        frequencyAnalyzer = new FrequencyAnalyzer(); // Initialize AudioFrequencyAnalyzer
-        audioRecorder = new AudioRecorder();
+        frequencyAnalyzer = new FrequencyAnalyzer(); // Initialize FrequencyAnalyzer class
+        audioRecorder = new AudioRecorder();// Initialize AudioRecorder class
         return binding.getRoot();
     }
 
@@ -48,6 +52,8 @@ public class SecondFragment extends Fragment {
         Button recordButton = view.findViewById(R.id.recordButton);
         TextView hzText = view.findViewById(R.id.hzText);
         TextView dBText = view.findViewById(R.id.dBText);
+        TextView hzAverageText = view.findViewById(R.id.hzText2);
+        TextView dBAverageText = view.findViewById(R.id.dBText2);
         TextView soundStage = view.findViewById(R.id.soundStage);
 
         recordButton.setOnClickListener(v -> {
@@ -68,23 +74,67 @@ public class SecondFragment extends Fragment {
                                 File audioFile = new File(audioRecorder.getAudioFilePath());
                                 //https://stackoverflow.com/questions/11701399/round-up-to-2-decimal-places-in-java
                                 //Sending the filepath into the frequency calculation method
-                                double frequency = frequencyAnalyzer.calculateFrequency(audioFile);
+                                List<Double> frequencies = frequencyAnalyzer.calculateFrequency(audioFile);
+                                int currentRecordingCount = 0;
+                                currentRecordingCount++;
+                                //Getting the results of all the frequencies from each sound and saving it to an arraylist to send to the graph
+                                if (soundStage.getText().equals("Sound: ")){
+                                    for (int i =0; i < frequencies.size(); i++){
+                                        firstSoundResults.add(frequencies.get(i));
+                                    }
+                                    soundStage.setText("Sound 1: Completed");
+                                } else if (currentRecordingCount == 2) {
+                                    for (int i =0; i < frequencies.size(); i++){
+                                        secondSoundResults.add(frequencies.get(i));
+                                    }
+                                    soundStage.setText("Sound 2: Completed");
+                                } else if (currentRecordingCount == 3) {
+                                    for (int i =0; i < frequencies.size(); i++){
+                                        thirdSoundResults.add(frequencies.get(i));
+                                    }
+                                    soundStage.setText("Sound 3: Completed");
+                                }
+                                else{
+                                    // note for future ruby go figure how to reload the page.
+                                }
+
+                                double sum = 0;
+                                if (frequencies.isEmpty()) {
+                                    System.out.println("No frequencies found. Check if the audio file is correct and not silent.");
+                                } else {
+                                    sum = 0;
+                                    for (double num : frequencies) {
+                                        sum += num;
+                                    }
+                                    double averageFrequency = sum / frequencies.size();
+                                    System.out.println("Average Frequency: " + averageFrequency);
+                                }
+                                double averageFrequency = sum / frequencies.size();
                                 //Rounding the result to two decimal places
-                                Double roundedFrequency = Math.round(frequency * 100.0) / 100.0;
+                                Double roundedFrequency = Math.round(averageFrequency * 100.0) / 100.0;
                                 hzText.setText("Hz: " + roundedFrequency);
-                                Double dB = 20 * Math.log10(frequency);
+                                Double dB = 20 * Math.log10(averageFrequency);
                                 Double roundedDB = Math.round(dB * 100.0) / 100.0;
                                 dBText.setText("dB: " + roundedDB);
 
                                 frequencyResults.add(roundedFrequency);
                                 decibalResults.add(roundedDB);
+                                if (currentRecordingCount ==3){
+                                    double sumOfFrequencyResults = frequencyResults.get(0)+frequencyResults.get(1)+frequencyResults.get(2);
+                                    double averageFrequencyResult = sumOfFrequencyResults / frequencyResults.size();
+                                    hzAverageText.setText("Average hZ: "+averageFrequencyResult);
+
+                                    double sumOfDBResults = decibalResults.get(0)+decibalResults.get(1)+decibalResults.get(2);
+                                    double averageDBResults = sumOfDBResults / decibalResults.size();
+                                    dBAverageText.setText("Average hZ: "+averageDBResults);
+
+                                    soundStage.setText("Sound 3: Completed");
+                                }
                             }
                         }
                     }.start();
                     isRecording = true;
                     audioRecorder.startRecording();
-                    int currentRecordingCount = 0;
-                    currentRecordingCount++;
                 } else {
                     audioRecorder.stopRecording();
                     isRecording = false;
