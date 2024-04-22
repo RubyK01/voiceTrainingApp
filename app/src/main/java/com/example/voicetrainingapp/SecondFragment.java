@@ -1,5 +1,7 @@
 package com.example.voicetrainingapp;
 
+import static android.content.Intent.getIntent;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -83,12 +85,12 @@ public class SecondFragment extends Fragment {
                                         firstSoundResults.add(frequencies.get(i));
                                     }
                                     soundStage.setText("Sound 1: Completed");
-                                } else if (currentRecordingCount == 2) {
+                                } else if (soundStage.getText().equals("Sound 1: Completed")) {
                                     for (int i =0; i < frequencies.size(); i++){
                                         secondSoundResults.add(frequencies.get(i));
                                     }
                                     soundStage.setText("Sound 2: Completed");
-                                } else if (currentRecordingCount == 3) {
+                                } else if (soundStage.getText().equals("Sound 2: Completed")) {
                                     for (int i =0; i < frequencies.size(); i++){
                                         thirdSoundResults.add(frequencies.get(i));
                                     }
@@ -97,6 +99,7 @@ public class SecondFragment extends Fragment {
                                 else{
                                     // note for future ruby go figure how to reload the page.
                                 }
+                                System.out.println(firstSoundResults);
 
                                 double sum = 0;
                                 if (frequencies.isEmpty()) {

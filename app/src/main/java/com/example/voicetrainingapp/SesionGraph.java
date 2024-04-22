@@ -15,7 +15,7 @@ import com.androidplot.xy.XYSeries;
 import java.util.Arrays;
 
 public class SesionGraph extends AppCompatActivity {
-
+    private SecondFragment secondFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
