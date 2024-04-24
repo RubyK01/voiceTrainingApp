@@ -3,63 +3,115 @@ package com.example.voicetrainingapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FillDirection;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SesionGraph extends AppCompatActivity {
-    private SecondFragment secondFragment;
+    //Variable to count how many times the view button is pressed in order to change how many results are visible
+    private int viewCount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sesion_graph);
-        //Average minimum and maximum for masculine and feminine vocal frequencies
-        int masculineMin = 85;
-        int masculineMax = 180;
-        int feminineMin = 165;
-        int feminineMax = 255;
+        //Variable to count how many times the view button is pressed in order to change how many results are visible
+        //grabbing the Hz data from second fragment
+        ArrayList<Double> firstSoundResults = (ArrayList<Double>) getIntent().getSerializableExtra("firstSoundResults");
+        ArrayList<Double> secondSoundResults = (ArrayList<Double>) getIntent().getSerializableExtra("secondSoundResults");
+        ArrayList<Double> thirdSoundResults = (ArrayList<Double>) getIntent().getSerializableExtra("thirdSoundResults");
+        //A list to hold time data, since the .wav files are always 15 seconds the list will always be 0-15
+        ArrayList<Double> seconds = new ArrayList<>(Arrays.asList(0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0));
+
         XYPlot plot = findViewById(R.id.sessionGraph);
-        // arrays to hold the min and max ranges
-        Number[] masculineRange = {masculineMin, masculineMin};
-        Number[] feminineRange = {feminineMin, feminineMin};
+        XYSeries firstResults = new SimpleXYSeries(
+                seconds,
+                firstSoundResults,
+                "1st"
+        );
 
-        XYSeries masculineSeries = new SimpleXYSeries(
-                Arrays.asList(masculineRange),
-                SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,
-                "Masc Range");
+        XYSeries secondResults = new SimpleXYSeries(
+                seconds,
+                secondSoundResults,
+                "2nd"
+        );
 
-        XYSeries feminineSeries = new SimpleXYSeries(
-                Arrays.asList(feminineRange),
-                SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,
-                "Fem Range");
+        XYSeries thirdResults = new SimpleXYSeries(
+                seconds,
+                thirdSoundResults,
+                "3rd"
+        );
 
-// Create formatters for the ranges that use transparent shading
-        LineAndPointFormatter masculineFormatter = new LineAndPointFormatter();
-        masculineFormatter.getLinePaint().setColor(Color.TRANSPARENT); // Hide the line
-        masculineFormatter.getFillPaint().setAlpha(50); // Semi-transparent shading
-        masculineFormatter.setFillDirection(FillDirection.BOTTOM);
+        LineAndPointFormatter firstResultFormatter = new LineAndPointFormatter(Color.RED, null, Color.argb(50, 255, 0, 0), null);
+        firstResultFormatter.getVertexPaint().setColor(Color.RED); // Hide the vertex markers
+        firstResultFormatter.setFillPaint(new Paint());
+        firstResultFormatter.getFillPaint().setColor(Color.argb(50, 255, 0, 0)); // Semi-transparent fill
 
-        LineAndPointFormatter feminineFormatter = new LineAndPointFormatter();
-        feminineFormatter.getLinePaint().setColor(Color.TRANSPARENT); // Hide the line
-        feminineFormatter.getFillPaint().setAlpha(50); // Semi-transparent shading
-        feminineFormatter.setFillDirection(FillDirection.BOTTOM);
+        LineAndPointFormatter secondResultFormatter = new LineAndPointFormatter(Color.BLUE, null, Color.argb(50, 0, 255, 0), null);
+        secondResultFormatter.getVertexPaint().setColor(Color.BLUE);
+        secondResultFormatter.setFillPaint(new Paint());
+        secondResultFormatter.getFillPaint().setColor(Color.argb(50, 0, 255, 0));
 
-// Add the series to the plot with their formatters
-        plot.addSeries(masculineSeries, masculineFormatter);
-        plot.addSeries(feminineSeries, feminineFormatter);
+        LineAndPointFormatter thirdResultFormatter = new LineAndPointFormatter(Color.GREEN, null, Color.argb(50, 0, 0, 255), null);
+        thirdResultFormatter.getVertexPaint().setColor(Color.GREEN);
+        thirdResultFormatter.setFillPaint(new Paint());
+        thirdResultFormatter.getFillPaint().setColor(Color.argb(50, 0, 0, 255));
+
+
+        plot.addSeries(firstResults,firstResultFormatter);
+        plot.addSeries(secondResults,secondResultFormatter);
+        plot.addSeries(thirdResults,thirdResultFormatter);
         plot.setTitle("Pitch Over Time");
-        plot.setDomainLabel("Duration (15 seconds)");
+        plot.setDomainLabel("Time (seconds)");
         plot.setRangeLabel("Pitch (Hz)");
+        //https://www.tabnine.com/code/java/methods/com.androidplot.xy.XYPlot/setDomainBoundaries
+        //Using Domain/Range Boundaries I can have the x & y axis go from 0 to 15 in seconds
+        //and 0 from 255 in hz
+        plot.setDomainBoundaries(0, 15, BoundaryMode.FIXED);
+        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 3);
+        plot.setRangeBoundaries(0, 255, BoundaryMode.FIXED);
+        plot.setRangeStep(StepMode.INCREMENT_BY_VAL,25);
         plot.redraw();
 
+        Button viewButton = findViewById(R.id.viewButton);
+        viewButton.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                //Every time the view button is tapped viewCOunt variable has a 1 added
+                //The resulting number decides on which plot is visible
+                viewCount = viewCount + 1;
+                plot.clear();
+                if(viewCount == 1){//Tap once for just the first result
+                    plot.addSeries(firstResults,firstResultFormatter);
+                }
+                else if(viewCount == 2){//Tap twice for just the second result
+                    plot.addSeries(secondResults,secondResultFormatter);
+                }
+                else if(viewCount == 3){//Tap three times for just the third result
+                    plot.addSeries(thirdResults,thirdResultFormatter);
+                }
+                else{//Tapping a fourth time will reset the view to showing all three plots at once
+                    plot.addSeries(firstResults,firstResultFormatter);
+                    plot.addSeries(secondResults,secondResultFormatter);
+                    plot.addSeries(thirdResults,thirdResultFormatter);
+                    viewCount = 0;
+                }
+                plot.redraw();
+            }
+        });
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
