@@ -1,11 +1,12 @@
 plugins {
     id("com.android.application")
     kotlin("android") version "1.8.10"
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.voicetrainingapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.voicetrainingapp"
@@ -47,11 +48,25 @@ dependencies {
     //jTransforms
     implementation ("com.github.wendykierp:JTransforms:3.1")
 
-    //Google firebase
-//    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    // Google Sign In SDK
+    implementation("com.google.android.gms:play-services-auth:21.1.0")
+
+    // Firebase SDK
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-analytics")
+    // Firebase UI Library
+    implementation("com.firebaseui:firebase-ui-auth:8.0.2")
+    implementation("com.firebaseui:firebase-ui-database:8.0.2")
 
     //Android Plot
     implementation ("com.androidplot:androidplot-core:1.5.10")
+    implementation("androidx.annotation:annotation:1.7.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
 
     //Testing
     testImplementation("junit:junit:4.13.2")

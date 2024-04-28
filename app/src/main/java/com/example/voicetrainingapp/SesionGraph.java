@@ -9,17 +9,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.androidplot.xy.BoundaryMode;
-import com.androidplot.xy.FillDirection;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.StepMode;
-import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+@SuppressWarnings({"deprecation", "unchecked"}) //To integrate Firebase I had to change SDK versions and some of of the code comes from deprciated version of
+//android plot so I have to surpress the errors that causes for it to work
 public class SesionGraph extends AppCompatActivity {
     //Variable to count how many times the view button is pressed in order to change how many results are visible
     private int viewCount = 0;
@@ -27,7 +26,8 @@ public class SesionGraph extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sesion_graph);
-        //Variable to count how many times the view button is pressed in order to change how many results are visible
+        //https://www.geeksforgeeks.org/how-to-get-extra-data-from-intent-in-android/
+        //Above link is where i learned how to get data from other activities.
         //grabbing the Hz data from second fragment
         ArrayList<Double> firstSoundResults = (ArrayList<Double>) getIntent().getSerializableExtra("firstSoundResults");
         ArrayList<Double> secondSoundResults = (ArrayList<Double>) getIntent().getSerializableExtra("secondSoundResults");
@@ -35,6 +35,8 @@ public class SesionGraph extends AppCompatActivity {
         //A list to hold time data, since the .wav files are always 15 seconds the list will always be 0-15
         ArrayList<Double> seconds = new ArrayList<>(Arrays.asList(0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0));
 
+        //http://halfhp.github.io/androidplot/docs/xyplot.html
+        //Using AndroidPlots XY class
         XYPlot plot = findViewById(R.id.sessionGraph);
         XYSeries firstResults = new SimpleXYSeries(
                 seconds,
@@ -69,19 +71,22 @@ public class SesionGraph extends AppCompatActivity {
         thirdResultFormatter.setFillPaint(new Paint());
         thirdResultFormatter.getFillPaint().setColor(Color.argb(50, 0, 0, 255));
 
-
+        //Adding plots to graph as default view
         plot.addSeries(firstResults,firstResultFormatter);
         plot.addSeries(secondResults,secondResultFormatter);
         plot.addSeries(thirdResults,thirdResultFormatter);
+        //setting the title of the graph
         plot.setTitle("Pitch Over Time");
+        //Labeling the x axis
         plot.setDomainLabel("Time (seconds)");
+        //Labeling the y axis
         plot.setRangeLabel("Pitch (Hz)");
         //https://www.tabnine.com/code/java/methods/com.androidplot.xy.XYPlot/setDomainBoundaries
         //Using Domain/Range Boundaries I can have the x & y axis go from 0 to 15 in seconds
         //and 0 from 255 in hz
         plot.setDomainBoundaries(0, 15, BoundaryMode.FIXED);
         plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 3);
-        plot.setRangeBoundaries(0, 255, BoundaryMode.FIXED);
+        plot.setRangeBoundaries(80, 255, BoundaryMode.FIXED);
         plot.setRangeStep(StepMode.INCREMENT_BY_VAL,25);
         plot.redraw();
 
@@ -90,7 +95,7 @@ public class SesionGraph extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                //Every time the view button is tapped viewCOunt variable has a 1 added
+                //Every time the view button is tapped viewCount variable has a 1 added
                 //The resulting number decides on which plot is visible
                 viewCount = viewCount + 1;
                 plot.clear();

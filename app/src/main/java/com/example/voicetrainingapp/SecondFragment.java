@@ -105,7 +105,7 @@ public class SecondFragment extends Fragment {
 
                                 double sum = 0;
                                 if (frequencies.isEmpty()) {
-                                    System.out.println("No frequencies found. Check if the audio file is correct and not silent.");
+                                    System.out.println("Error");
                                 } else {
                                     sum = 0;
                                     for (double num : frequencies) {
@@ -124,17 +124,25 @@ public class SecondFragment extends Fragment {
 
                                 frequencyResults.add(roundedFrequency);
                                 decibalResults.add(roundedDB);
-                                if (currentRecordingCount ==3){
-                                    double sumOfFrequencyResults = frequencyResults.get(0)+frequencyResults.get(1)+frequencyResults.get(2);
-                                    double averageFrequencyResult = sumOfFrequencyResults / frequencyResults.size();
-                                    hzAverageText.setText("Average hZ: "+averageFrequencyResult);
-
-                                    double sumOfDBResults = decibalResults.get(0)+decibalResults.get(1)+decibalResults.get(2);
-                                    double averageDBResults = sumOfDBResults / decibalResults.size();
-                                    dBAverageText.setText("Average hZ: "+averageDBResults);
-
-                                    soundStage.setText("Sound 3: Completed");
-                                }
+                                double sumOfFrequencyResults = 0.0;
+                                double averageFrequencyResult = 0.0;
+                                double sumOfDBResults = 0.0;
+//                                if (currentRecordingCount ==1){
+//                                    for(int i =0; i < frequencyResults.size();i++){
+//                                        sumOfFrequencyResults = sumOfFrequencyResults + frequencyResults.get(i);
+//                                    }
+//                                    averageFrequencyResult = sumOfFrequencyResults / frequencyResults.size();
+//                                    hzAverageText.setText("Average hZ: "+averageFrequencyResult);
+//                                    sumOfFrequencyResults = firstSoundResults.get(0)+firstSoundResults.get(1)+firstSoundResults.get(2)
+//                                            +firstSoundResults.get(3);
+//                                    hzAverageText.setText("Average hZ: "+averageFrequencyResult);
+//
+//                                    sumOfDBResults = decibalResults.get(0)+decibalResults.get(1)+decibalResults.get(2);
+//                                    double averageDBResults = sumOfDBResults / decibalResults.size();
+//                                    dBAverageText.setText("Average hZ: "+averageDBResults);
+//
+//
+//                                }
                             }
                         }
                     }.start();
@@ -167,6 +175,9 @@ public class SecondFragment extends Fragment {
             intent.putExtra("firstSoundResults",firstSoundResults);
             intent.putExtra("secondSoundResults",secondSoundResults);
             intent.putExtra("thirdSoundResults",thirdSoundResults);
+            if (firstSoundResults.isEmpty() || secondSoundResults.isEmpty() || thirdSoundResults.isEmpty()){
+
+            }
             startActivity(intent);
         });
 

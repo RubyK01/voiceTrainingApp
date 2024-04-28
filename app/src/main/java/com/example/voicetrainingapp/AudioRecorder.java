@@ -20,7 +20,7 @@ public class AudioRecorder {
     private static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT);
     private File outputFile;
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission")//I do a permission check already in the SecondFragment class
     public void startRecording() {
         prepareFile();
         if (audioRecord == null) {

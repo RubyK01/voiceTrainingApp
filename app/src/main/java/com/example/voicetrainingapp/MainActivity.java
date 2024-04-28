@@ -1,11 +1,13 @@
 package com.example.voicetrainingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.WindowCompat;
@@ -18,18 +20,53 @@ import com.example.voicetrainingapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    FirebaseAuth auth;
+    Button btnLogout;
+    FirebaseUser user;
+    TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FirebaseApp.initializeApp(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        auth = FirebaseAuth.getInstance();
+        btnLogout = findViewById(R.id.logout);
+        user = auth.getCurrentUser();
+        if (text != null) {
+            binding.userDetails.setText("test");
+        } else {
+            Log.e("MainActivity", "TextView is null");
+        }
+        if(user == null){
+            Intent loginPage = new Intent(getApplicationContext(), Login.class);
+            startActivity(loginPage);
+            finish();
+        }
+        else{
+            binding.userDetails.setText(user.getEmail().toString());
+        }
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent loginPage = new Intent(getApplicationContext(), Login.class);
+                startActivity(loginPage);
+                finish();
+            }
+        });
 
         setSupportActionBar(binding.toolbar);
 
