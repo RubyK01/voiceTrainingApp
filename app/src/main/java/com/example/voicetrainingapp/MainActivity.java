@@ -10,7 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.WindowCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,7 +29,7 @@ import android.widget.TextView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+@SuppressWarnings({"deprecation", "unchecked"})
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
@@ -45,6 +48,30 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         btnLogout = findViewById(R.id.logout);
         user = auth.getCurrentUser();
+
+//        if (findViewById(R.id.fragment_container) != null) {
+//            if (savedInstanceState != null) {
+//                return;
+//            }
+//            FirstFragment firstFragment = new FirstFragment();
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_container, firstFragment).commit();
+//        }
+        //https://stackoverflow.com/posts/42081598/revisions
+//        FirstFragment ff = new FirstFragment();
+//        Bundle args = new Bundle();
+//        ff.setArguments(args);
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.replace(R.id.FirstFragment, ff);
+//        fragmentTransaction.commit();
+
+//        ((ConstraintLayout) findViewById(R.id.FirstFragment)).removeAllViews();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        FirstFragment fnv = new FirstFragment();
+//        fragmentTransaction.replace(R.id.FirstFragment, fnv).commit();
+
         if (text != null) {
             binding.userDetails.setText("test");
         } else {
