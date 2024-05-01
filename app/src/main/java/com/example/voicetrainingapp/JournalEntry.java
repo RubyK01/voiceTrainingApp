@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,8 +27,8 @@ public class JournalEntry extends AppCompatActivity {
     FirebaseDatabase db = FirebaseDatabase.getInstance();
     DatabaseReference dbRef;
     FirebaseUser user;
-    int noteId = 0;
-    String date, email, entryText, rating;
+    int entryID = 0;
+    String date, email, rating;
     JournalDetails details;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class JournalEntry extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    noteId = (int) snapshot.getChildrenCount();
+                    entryID = (int) snapshot.getChildrenCount();
                 }
             }
 
@@ -62,18 +63,33 @@ public class JournalEntry extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user != null){
-                    email = user.getEmail().toString();
-                    details.setEmail(email.toString());
-                    details.setDate(date.toString());
-                    details.setRating(rating);
-                    details.setEntryText(entryValue.getText().toString());
+                if (user != null){ //Checking if the user is signed in, user should only have been able to get here if they are logged in so double checking to be safe
+                    // https://stackoverflow.com/questions/2841550/what-does-d-mean-in-a-regular-expression
+                    // https://www.javatpoint.com/java-regex
+                    // Here I used the matches method from regex to see if the ratingValue contains a number since in the app it says it has to be a number between 1 and 5
+                    if (ratingValue.getText().toString().matches("\\d+")) {
+                        if(ratingValue.getText().toString().contains("1") || ratingValue.getText().toString().contains("2") || ratingValue.getText().toString().contains("3") || ratingValue.getText().toString().contains("4") || ratingValue.getText().toString().contains("5")) {
+                            email = user.getEmail().toString();
+                            details.setEmail(email.toString());
+                            details.setDate(date.toString());
+                            details.setRating(ratingValue.getText().toString());
+                            details.setEntryText(entryValue.getText().toString());
 
-                    dbRef.child(String.valueOf(noteId+1)).setValue(details);
+                            dbRef.child(String.valueOf(entryID + 1)).setValue(details);
 
-                    Intent journalPage = new Intent(getApplicationContext(), Journal.class);
-                    startActivity(journalPage);
-                    finish();
+                            Intent journalPage = new Intent(getApplicationContext(), Journal.class);
+                            startActivity(journalPage);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(JournalEntry.this, "Rating must be a number between 1 - 5!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                    else{
+                        Toast.makeText(JournalEntry.this, "Rating must be a number between 1 - 5!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
                 else{//If there is no user instance detected redirect to login page to avoid crashing
                     Intent loginPage = new Intent(getApplicationContext(), Login.class);
@@ -91,19 +107,5 @@ public class JournalEntry extends AppCompatActivity {
                 finish();
             }
         });
-        // Fetch data that is passed from Journal
-        Intent intent = getIntent();
-
-        // Accessing the data using key and value
-        noteId = intent.getIntExtra("noteId", -1);
-        if (noteId != -1) {
-            entryValue.setText(Journal.notes.get(noteId));
-        } else {
-
-            Journal.notes.add("");
-            noteId = Journal.notes.size() - 1;
-            Journal.arrayAdapter.notifyDataSetChanged();
-
-        }
     }
 }

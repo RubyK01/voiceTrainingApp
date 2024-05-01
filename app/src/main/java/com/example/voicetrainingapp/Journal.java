@@ -17,37 +17,21 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Journal extends AppCompatActivity {
-    //https://www.geeksforgeeks.org/how-to-build-a-simple-notes-app-in-android/
+    // https://www.geeksforgeeks.org/how-to-build-a-simple-notes-app-in-android/
+    // https://www.youtube.com/watch?v=E9drbKeVG7Y
     static ArrayList<String> notes = new ArrayList<>();
     static ArrayAdapter arrayAdapter;
+    FirebaseDatabase db = FirebaseDatabase.getInstance();
+    DatabaseReference dbRef;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_journal_entry_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        if (item.getItemId() == R.id.add_note) {
-
-            // Going from Jounral page to the entry page
-            Intent intent = new Intent(getApplicationContext(), JournalEntry.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return false;
-    }
+        
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

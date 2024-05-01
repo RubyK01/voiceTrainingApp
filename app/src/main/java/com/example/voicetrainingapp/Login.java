@@ -20,11 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
-    TextInputEditText editTextEmail, editTextPassword;
-    Button btnLogin;
-    FirebaseAuth mAuth;
-    ProgressBar progressBar;
-    TextView text;
+    TextInputEditText editTextEmail, editTextPassword; //variables to hold inputted user credentials.
+    Button btnLogin; //login button variable
+    FirebaseAuth mAuth; //Firebase authenicifation
+    ProgressBar progressBar;//Variable used to hide and show the loading screen
+    TextView text;//Variable used to make the Login Now text a link
 
     @Override
     public void onStart() {

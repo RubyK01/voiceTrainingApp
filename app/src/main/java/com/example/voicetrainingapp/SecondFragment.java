@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -169,16 +170,18 @@ public class SecondFragment extends Fragment {
 
         Button buttonThird = view.findViewById(R.id.button_third); // Making the results button direct user to the graph screen
         buttonThird.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SesionGraph.class);
-            //https://www.geeksforgeeks.org/how-to-use-putextra-and-getextra-for-string-data-in-android/
-            //From the above I was able to figure out how to send the arrayLists containing the Hz data to the graphsession class
-            intent.putExtra("firstSoundResults",firstSoundResults);
-            intent.putExtra("secondSoundResults",secondSoundResults);
-            intent.putExtra("thirdSoundResults",thirdSoundResults);
             if (firstSoundResults.isEmpty() || secondSoundResults.isEmpty() || thirdSoundResults.isEmpty()){
-
+                Toast.makeText(getActivity(), "Please make three attempts before viewing results.", Toast.LENGTH_SHORT).show();
             }
-            startActivity(intent);
+            else{
+                Intent intent = new Intent(getActivity(), SesionGraph.class);
+                //https://www.geeksforgeeks.org/how-to-use-putextra-and-getextra-for-string-data-in-android/
+                //From the above I was able to figure out how to send the arrayLists containing the Hz data to the graphsession class
+                intent.putExtra("firstSoundResults",firstSoundResults);
+                intent.putExtra("secondSoundResults",secondSoundResults);
+                intent.putExtra("thirdSoundResults",thirdSoundResults);
+                startActivity(intent);
+            }
         });
 
     }

@@ -86,7 +86,7 @@ public class SesionGraph extends AppCompatActivity {
         //and 0 from 255 in hz
         plot.setDomainBoundaries(0, 15, BoundaryMode.FIXED);
         plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 3);
-        plot.setRangeBoundaries(80, 255, BoundaryMode.FIXED);
+        plot.setRangeBoundaries(85, 255, BoundaryMode.FIXED);
         plot.setRangeStep(StepMode.INCREMENT_BY_VAL,25);
         plot.redraw();
 
