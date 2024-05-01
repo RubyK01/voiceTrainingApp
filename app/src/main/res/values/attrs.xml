@@ -1,0 +1,6 @@
+<declare-styleable name="CustomAttrs">
+    <attr name="drawerArrowStyle" format="reference" />
+    <attr name="height" format="dimension" />
+    <attr name="isLightTheme" format="boolean" />
+    <attr name="title" format="string" />
+</declare-styleable>

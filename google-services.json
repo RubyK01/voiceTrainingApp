@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "155660163682",
+    "project_id": "voicetrainingapp",
+    "storage_bucket": "voicetrainingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155660163682:android:8e7ea5e94e7c27ac6c8f3b",
+        "android_client_info": {
+          "package_name": "com.example.voicetrainingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDhOt-Iu5NSh0PNCdar0ZHsETIlkwlJ3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

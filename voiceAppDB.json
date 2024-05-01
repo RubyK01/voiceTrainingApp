@@ -1,0 +1,42 @@
+{
+  "users": {
+    "userID1": {
+      "fName": "John",
+      "lName": "Doe",
+      "email": "johndoe@example.com",
+      "password": "Password1"
+    },
+    "userID2": {
+      "fName": "Jane",
+      "lName": "Smith",
+      "email": "janesmith@example.com",
+      "password": "Password1"
+    }
+  },
+  "frequency": {
+    "freqID1": {
+      "averageHz": 122,
+      "date": "2024-04-18",
+      "userID": "userID1"
+    },
+    "freqID2": {
+      "averageHz": 203,
+      "date": "2024-04-19",
+      "userID": "userID2"
+    }
+  },
+  "journal": {
+    "entryID1": {
+      "userID": "userID1",
+      "rating": 5,
+      "date": "2024-04-18",
+      "entryText": "Felt great about today's session."
+    },
+    "entryID2": {
+      "userID": "userID2",
+      "rating": 4,
+      "date": "2024-04-19",
+      "entryText": "Progressing, but need to work on consistency."
+    }
+  }
+}
