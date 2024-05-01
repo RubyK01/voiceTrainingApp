@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     FirebaseAuth auth;
-    Button btnLogout;
+    Button btnLogout, btnJournal;
     FirebaseUser user;
     TextView text;
 
@@ -47,30 +47,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         auth = FirebaseAuth.getInstance();
         btnLogout = findViewById(R.id.logout);
+        btnJournal = findViewById(R.id.button_second);
         user = auth.getCurrentUser();
-
-//        if (findViewById(R.id.fragment_container) != null) {
-//            if (savedInstanceState != null) {
-//                return;
-//            }
-//            FirstFragment firstFragment = new FirstFragment();
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.fragment_container, firstFragment).commit();
-//        }
-        //https://stackoverflow.com/posts/42081598/revisions
-//        FirstFragment ff = new FirstFragment();
-//        Bundle args = new Bundle();
-//        ff.setArguments(args);
-//        FragmentManager fm = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.replace(R.id.FirstFragment, ff);
-//        fragmentTransaction.commit();
-
-//        ((ConstraintLayout) findViewById(R.id.FirstFragment)).removeAllViews();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        FirstFragment fnv = new FirstFragment();
-//        fragmentTransaction.replace(R.id.FirstFragment, fnv).commit();
 
         if (text != null) {
             binding.userDetails.setText("test");
@@ -91,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 Intent loginPage = new Intent(getApplicationContext(), Login.class);
                 startActivity(loginPage);
+                finish();
+            }
+        });
+
+        btnJournal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent journalPage = new Intent(getApplicationContext(), Journal.class);
+                startActivity(journalPage);
                 finish();
             }
         });
