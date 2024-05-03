@@ -6,6 +6,7 @@ public class JournalDetails {
     private String date; //holds the date the entry was made
     private String email;//holds the users email
     private String rating;//holds the rating value
+    private String id; //holds id for entry
 
     public JournalDetails(){
 
@@ -42,5 +43,13 @@ public class JournalDetails {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

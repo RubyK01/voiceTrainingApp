@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -25,32 +26,53 @@ public class JournalEntry extends AppCompatActivity {
     //https://www.geeksforgeeks.org/how-to-build-a-simple-notes-app-in-android/
     //https://www.youtube.com/watch?v=td1jX_zDi5s
     FirebaseDatabase db = FirebaseDatabase.getInstance();
-    DatabaseReference dbRef;
+    DatabaseReference dbRef, ref2;
     FirebaseUser user;
     int entryID = 0;
-    String date, email, rating;
+    String date, email, rating, id, idp1, idp2;
     JournalDetails details;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journalentry);
+
+        // Initialize UI components
         Button submitBtn = findViewById(R.id.submitBtn);
         Button cancelBtn = findViewById(R.id.cancelBtn);
         EditText ratingValue = findViewById(R.id.rating);
         EditText entryValue = findViewById(R.id.editText);
+
+        // Initialize journal details
         details = new JournalDetails();
-        dbRef = db.getReference().child("journalEntry");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         date = dateFormat.format(new Date());
-        details.setDate(date);
-        rating = ratingValue.getText().toString();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Ensure the Firebase user is not null and initialize database reference
+        try {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                dbRef = db.getReference().child(user.getEmail().replace('.', ','));
+            } else {
+                // User is not logged in, redirect to Login screen
+                Toast.makeText(this, "User not logged in. Redirecting to login screen.", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, Login.class));
+                finish();
+                return; // Important to stop further execution in this case
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to initialize database reference: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Optionally handle other initialization steps or close the activity
+        }
 
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     entryID = (int) snapshot.getChildrenCount();
+                    System.out.println("currently "+entryID+" exists for "+user.getEmail().toString());
+                }
+                else if(!snapshot.exists()){
+                    entryID = 0;
                 }
             }
 
@@ -74,6 +96,10 @@ public class JournalEntry extends AppCompatActivity {
                             details.setDate(date.toString());
                             details.setRating(ratingValue.getText().toString());
                             details.setEntryText(entryValue.getText().toString());
+                            idp1 = user.getEmail().toString();
+                            idp2 = String.valueOf(entryID);
+                            id = idp1 + idp2;
+                            details.setId(id);
 
                             dbRef.child(String.valueOf(entryID + 1)).setValue(details);
 
