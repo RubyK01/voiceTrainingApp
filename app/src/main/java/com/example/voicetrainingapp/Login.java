@@ -45,7 +45,7 @@ public class Login extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //https://www.youtube.com/watch?v=QAKq8UBv4GI
+        // https://www.youtube.com/watch?v=QAKq8UBv4GI
         editTextEmail = findViewById(R.id.email); //To grab inputted email from textfield
         editTextPassword = findViewById(R.id.password);//To grab inputted password from textfield
         btnLogin = findViewById(R.id.btnLogin); //login button

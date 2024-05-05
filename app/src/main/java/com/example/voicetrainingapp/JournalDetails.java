@@ -9,7 +9,11 @@ public class JournalDetails {
     private String id; //holds id for entry
 
     public JournalDetails(){
-
+        this.entryText = entryText;
+        this.date = date;
+        this.rating = rating;
+        this.email = email;
+        this.id = id;
     }
 
     //setters and getters
@@ -51,5 +55,9 @@ public class JournalDetails {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDetails() {
+        return entryText + " - Date: " + date + " - Rating: " + rating;
     }
 }

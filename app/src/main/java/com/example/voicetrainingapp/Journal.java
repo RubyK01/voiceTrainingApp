@@ -38,7 +38,7 @@ public class Journal extends AppCompatActivity {
     FirebaseDatabase db = FirebaseDatabase.getInstance(); // connects instance to firebase
     DatabaseReference dbRef; // database reference
     FirebaseUser user; // variable containing user details e.g email
-    String entryText, id, idp1, idp2, rating, date;
+    String entryText, id, idp1, idp2, rating, date, expectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,7 @@ public class Journal extends AppCompatActivity {
         ArrayList<String>entryList = new ArrayList<>();
         ArrayList<String>dateList = new ArrayList<>();
         ArrayList<String>ratingList = new ArrayList<>();
+        ArrayList<String>idList = new ArrayList<>();
         ArrayList<String>combinedList = new ArrayList<>();
 
         try {
@@ -77,41 +78,25 @@ public class Journal extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // https://firebase.google.com/docs/reference/kotlin/com/google/firebase/database/DataSnapshot#getChildrenCount() - How I learned to get the number of
-                    // https://stackoverflow.com/a/44935464 - How I learned to loop through the query
-                    int i = 0; // Initialize counter to append to email for ID comparison
                     for (DataSnapshot child : snapshot.getChildren()) {
-                        // Construct the expected ID by appending counter to email
-                        String expectedId = user.getEmail() + i;
-                        String actualId = child.child("id").getValue(String.class);
+                        String entryId = child.getKey(); // Get the actual key for each journal entry
+                        String entryText = child.child("entryText").getValue(String.class);
+                        String date = child.child("date").getValue(String.class);
+                        String rating = child.child("rating").getValue(String.class);
 
-                        System.out.println("Check value: " + expectedId); // Printing for debugging
+                        entryList.add(entryText);
+                        dateList.add(date);
+                        ratingList.add(rating);
+                        idList.add(entryId); // Use the actual Firebase key as ID
 
-                        // Compare the actual ID from snapshot with the expected ID
-                        if (actualId != null && actualId.equals(expectedId)) {
-                            String entryText = child.child("entryText").getValue(String.class);
-                            String date = child.child("date").getValue(String.class);
-                            String rating = child.child("rating").getValue(String.class);
-                            System.out.println("Entry Found: " + entryText + ", Date: " + date + ", Rating: " + rating);
-
-                            // Add data to lists
-                            entryList.add(entryText);
-                            System.out.println("EntryList: "+entryList);
-                            dateList.add(date);
-                            System.out.println("dateList: "+dateList);
-                            ratingList.add(rating);
-                            System.out.println("ratingList: "+ratingList);
-                            String combinedEntry = entryText + " - Date: " + date + " - Rating: " + rating;
-                            combinedList.add(combinedEntry);
-                        }
-                        i++; // Increment counter for next expected ID
+                        String combinedEntry = entryText + " - Date: " + date + " - Rating: " + rating;
+                        combinedList.add(combinedEntry);
                     }
                     if (!combinedList.isEmpty()) {
                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(Journal.this, android.R.layout.simple_list_item_1, combinedList);
                         listView.setAdapter(arrayAdapter);
                     }
-                }
-                else {
+                } else {
                     noEntry.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
                 }
@@ -147,12 +132,12 @@ public class Journal extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                // Going from MainActivity to NotesEditorActivity
-                Intent intent = new Intent(getApplicationContext(), JournalEntry.class);
-                intent.putExtra("noteId", i);
+                Intent intent = new Intent(getApplicationContext(), JournalEdit.class);
+                intent.putExtra("ID", idList.get(i)); // Pass the correct Firebase ID
+                intent.putExtra("entryText", entryList.get(i));
+                intent.putExtra("date", dateList.get(i));
+                intent.putExtra("rating", ratingList.get(i));
                 startActivity(intent);
-
             }
         });
     }

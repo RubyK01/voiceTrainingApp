@@ -1,5 +1,8 @@
 package com.example.voicetrainingapp;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +40,30 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            }
+        });
+
+        Button btnLogout = view.findViewById(R.id.logout);
+        Button btnJournal = view.findViewById(R.id.button_second);
+        // Had an issue where when I would go back to the main screen the buttons other vocie training button wouldnt work
+        // Solved it by using a method from a stack overflow post that mentioned using context
+        // https://stackoverflow.com/a/55459563
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent loginPage = new Intent(getContext(), Login.class);
+                startActivity(loginPage);
+                getActivity().finish();
+            }
+        });
+
+        btnJournal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent journalPage = new Intent(getContext(), Journal.class);
+                startActivity(journalPage);
+                getActivity().finish();
             }
         });
     }

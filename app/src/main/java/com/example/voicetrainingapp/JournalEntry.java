@@ -29,7 +29,7 @@ public class JournalEntry extends AppCompatActivity {
     DatabaseReference dbRef, ref2;
     FirebaseUser user;
     int entryID = 0;
-    String date, email, rating, id, idp1, idp2;
+    String date, email, id, idp1, idp2;
     JournalDetails details;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +101,8 @@ public class JournalEntry extends AppCompatActivity {
                             id = idp1 + idp2;
                             details.setId(id);
 
-                            dbRef.child(String.valueOf(entryID + 1)).setValue(details);
-
+                            dbRef.child(String.valueOf(entryID + 1)+"Journal").setValue(details);
+                            Toast.makeText(JournalEntry.this, "Journal Entry Updated!", Toast.LENGTH_SHORT).show();
                             Intent journalPage = new Intent(getApplicationContext(), Journal.class);
                             startActivity(journalPage);
                             finish();
