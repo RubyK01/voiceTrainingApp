@@ -2,14 +2,10 @@ package com.example.voicetrainingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.Instrumentation;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,7 +24,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Journal extends AppCompatActivity {
     // https://www.geeksforgeeks.org/how-to-build-a-simple-notes-app-in-android/ - where I got the journal layout from and learned about arrayAdapters
@@ -87,7 +82,7 @@ public class Journal extends AppCompatActivity {
                         entryList.add(entryText);
                         dateList.add(date);
                         ratingList.add(rating);
-                        idList.add(entryId); // Use the actual Firebase key as ID
+                        idList.add(entryId);
 
                         String combinedEntry = entryText + " - Date: " + date + " - Rating: " + rating;
                         combinedList.add(combinedEntry);
@@ -133,7 +128,7 @@ public class Journal extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), JournalEdit.class);
-                intent.putExtra("ID", idList.get(i)); // Pass the correct Firebase ID
+                intent.putExtra("ID", idList.get(i));
                 intent.putExtra("entryText", entryList.get(i));
                 intent.putExtra("date", dateList.get(i));
                 intent.putExtra("rating", ratingList.get(i));

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +23,21 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.voicetrainingapp.databinding.FragmentSecondBinding;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
+    FirebaseDatabase db = FirebaseDatabase.getInstance(); // connects instance to firebase
+    DatabaseReference dbRef; // database reference
+    FirebaseUser user; // variable containing user details e.g email
     private AudioRecorder audioRecorder;// Instance of AudioRecoder
     private static final int RECORD_AUDIO_PERMISSION_REQUEST_CODE = 123;
     private boolean isRecording = false;//Used to check if the microphone is recording
@@ -43,16 +51,61 @@ public class SecondFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
+
     ) {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         frequencyAnalyzer = new FrequencyAnalyzer(); // Initialize FrequencyAnalyzer class
         audioRecorder = new AudioRecorder();// Initialize AudioRecorder class
+        dbRef = FirebaseDatabase.getInstance().getReference();
         return binding.getRoot();
+    }
+
+    public void saveResults(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            String email = user.getEmail();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String date = dateFormat.format(new Date());
+
+            FrequencyResults savedResults = new FrequencyResults();
+            savedResults.setFirstSoundResults(firstSoundResults);
+            savedResults.setSecondSoundResults(secondSoundResults);
+            savedResults.setThirdSoundResults(thirdSoundResults);
+            savedResults.setDate(date);
+            savedResults.setEmail(email);
+
+            dbRef.child("frequencies").push().setValue(savedResults);
+            Toast.makeText(getContext(), "Results saved", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(), "Not Logged in.", Toast.LENGTH_SHORT).show();
+            Intent loginPage = new Intent(getContext(), Login.class);
+            startActivity(loginPage);
+            getActivity().finish();
+        }
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Button recordButton = view.findViewById(R.id.recordButton);
+
+        try {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                dbRef = db.getReference().child(user.getEmail().replace('.', ',')+"frequency");
+            } else {
+                // User is not logged in, redirect to Login screen
+                Toast.makeText(getContext(), "Not Logged in.", Toast.LENGTH_SHORT).show();
+                Intent loginPage = new Intent(getContext(), Login.class);
+                startActivity(loginPage);
+                getActivity().finish();
+                return; // Important to stop further execution in this case
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Failed to initialize database reference: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Optionally handle other initialization steps or close the activity
+        }
+
         TextView hzText = view.findViewById(R.id.hzText);
         TextView dBText = view.findViewById(R.id.dBText);
         TextView hzAverageText = view.findViewById(R.id.hzText2);
@@ -174,6 +227,7 @@ public class SecondFragment extends Fragment {
                 Toast.makeText(getActivity(), "Please make three attempts before viewing results.", Toast.LENGTH_SHORT).show();
             }
             else{
+                saveResults();
                 Intent intent = new Intent(getActivity(), SesionGraph.class);
                 //https://www.geeksforgeeks.org/how-to-use-putextra-and-getextra-for-string-data-in-android/
                 //From the above I was able to figure out how to send the arrayLists containing the Hz data to the graphsession class
