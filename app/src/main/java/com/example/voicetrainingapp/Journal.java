@@ -84,7 +84,8 @@ public class Journal extends AppCompatActivity {
                         ratingList.add(rating);
                         idList.add(entryId);
 
-                        String combinedEntry = entryText + " - Date: " + date + " - Rating: " + rating;
+                        String entryTextShortened = entryText.length() > 8 ? entryText.substring(0, 8) + "..." : entryText;
+                        String combinedEntry = entryTextShortened + " - Date: " + date + " - Rating: " + rating;
                         combinedList.add(combinedEntry);
                     }
                     if (!combinedList.isEmpty()) {

@@ -100,11 +100,17 @@ public class JournalEntry extends AppCompatActivity {
                             id = idp1 + idp2;
                             details.setId(id);
 
-                            dbRef.child(String.valueOf(entryID + 1)+"Journal").setValue(details);
-                            Toast.makeText(JournalEntry.this, "Journal Entry Updated!", Toast.LENGTH_SHORT).show();
-                            Intent journalPage = new Intent(getApplicationContext(), Journal.class);
-                            startActivity(journalPage);
-                            finish();
+                            if(details.getEntryText().length() > 250) {
+                                Toast.makeText(JournalEntry.this, "Entrys cannot be greater than 250 character!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            else{
+                                dbRef.child(String.valueOf(entryID + 1) + "Journal").setValue(details);
+                                Toast.makeText(JournalEntry.this, "Journal Entry Updated!", Toast.LENGTH_SHORT).show();
+                                Intent journalPage = new Intent(getApplicationContext(), Journal.class);
+                                startActivity(journalPage);
+                                finish();
+                            }
                         }
                         else {
                             Toast.makeText(JournalEntry.this, "Rating must be a number between 1 - 5!", Toast.LENGTH_SHORT).show();

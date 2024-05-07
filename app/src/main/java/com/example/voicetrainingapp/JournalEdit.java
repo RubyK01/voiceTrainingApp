@@ -27,7 +27,6 @@ public class JournalEdit extends AppCompatActivity {
 
     private EditText editText;  // EditText for entry text
     private EditText ratingInput;  // EditText for rating
-
     // https://stackoverflow.com/questions/47366591/how-to-update-only-specific-field-on-firebase-database-on-android
     // https://stackoverflow.com/questions/44224083/how-to-update-child-with-new-fields-in-firebase-realtime-database
     // https://stackoverflow.com/questions/47366591/how-to-update-only-specific-field-on-firebase-database-on-android
@@ -58,6 +57,10 @@ public class JournalEdit extends AppCompatActivity {
         editBtn.setOnClickListener(v -> {
             if (!ratingInput.getText().toString().trim().matches("[1-5]")) {
                 Toast.makeText(JournalEdit.this, "Rating must be a number between 1 - 5!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if (editText.length() > 250) {
+                Toast.makeText(JournalEdit.this, "Entrys cannot be greater than 250 character!", Toast.LENGTH_SHORT).show();
                 return;
             }
             DatabaseReference entryRef = dbRef.child(id);  // Directly use id from intent
