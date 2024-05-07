@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,8 +35,12 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Button btnLogout = view.findViewById(R.id.logout);
+        ImageButton btnVoiceTraining = (ImageButton) view.findViewById(R.id.button_first);
+        ImageButton btnJournal = (ImageButton) view.findViewById(R.id.button_second);
+        ImageButton btnProgress = (ImageButton) view.findViewById(R.id.button_third);
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+        btnVoiceTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
@@ -43,8 +48,15 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        Button btnLogout = view.findViewById(R.id.logout);
-        Button btnJournal = view.findViewById(R.id.button_second);
+        btnProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent progressPage = new Intent(getContext(), OverallGraph.class);
+                startActivity(progressPage);
+                getActivity().finish();
+            }
+        });
+
         // Had an issue where when I would go back to the main screen the buttons other vocie training button wouldnt work
         // Solved it by using a method from a stack overflow post that mentioned using context
         // https://stackoverflow.com/a/55459563

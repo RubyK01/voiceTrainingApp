@@ -26,6 +26,7 @@ import com.example.voicetrainingapp.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     FirebaseAuth auth;
-    Button btnLogout, btnJournal, btnProgress;
+    ImageButton btnJournal, btnProgress;
+    Button btnLogout;
     FirebaseUser user;
     TextView text;
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         auth = FirebaseAuth.getInstance();
+
         btnLogout = findViewById(R.id.logout);
         btnJournal = findViewById(R.id.button_second);
         btnProgress = findViewById(R.id.button_third);

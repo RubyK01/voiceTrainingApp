@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:text="Masculine"
             android:id="@+id/mascText"
-            android:textColor="@android:color/black"
             android:layout_marginStart="5dp"/>
 
         <View
@@ -44,7 +43,6 @@
             android:layout_height="wrap_content"
             android:text="Feminine"
             android:id="@+id/femText"
-            android:textColor="@android:color/black"
             android:layout_marginStart="5dp"/>
 
         <View
@@ -58,7 +56,6 @@
             android:layout_height="wrap_content"
             android:text="Androgynous"
             android:id="@+id/androText"
-            android:textColor="@android:color/black"
             android:layout_marginStart="5dp"/>
 
     </LinearLayout>

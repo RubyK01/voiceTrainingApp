@@ -1,121 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
     tools:context=".FirstFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp">
 
-
-
-        <Button
+        <ImageButton
             android:id="@+id/button_first"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Voice Training"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="MissingConstraints" />
+            android:layout_weight="1"
+            android:layout_height="130dp"
+            android:src="@drawable/voicetrainingicon"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/voice_training"
+            android:background="?android:selectableItemBackground"
+            android:layout_marginEnd="8dp"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/button_second"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Journal"
-            app:layout_constraintTop_toBottomOf="@id/button_first"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_weight="1"
+            android:layout_height="130dp"
+            android:src="@drawable/journalicon"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/journal"
+            android:background="?android:selectableItemBackground"/>
+    </LinearLayout>
 
-        <Button
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginTop="16dp">
+
+        <ImageButton
             android:id="@+id/button_third"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Overall Progress"
-            app:layout_constraintTop_toBottomOf="@id/button_second"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:src="@drawable/overallicon"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/overall_progress"
+            android:background="?android:selectableItemBackground"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginTop="16dp">
+
         <Button
             android:id="@+id/logout"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_third"
-            app:layout_constraintVertical_bias="1.0" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
-
-
-
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.core.widget.NestedScrollView-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".FirstFragment">-->
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:padding="16dp">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textview_first"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="testing to see if text changes"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/button_first" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/button_first"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/next"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/textview_first"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/button_second"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Button 2"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/button_first"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/button_third"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Button 3"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/button_second"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/button_fourth"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Button 4"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/button_third"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent" />-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--</androidx.core.widget.NestedScrollView>-->
+            android:text="Logout"/>
+    </LinearLayout>
+</LinearLayout>

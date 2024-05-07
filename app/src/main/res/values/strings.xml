@@ -63,4 +63,7 @@
     <string name="Lastname">Last name</string>
     <string name="click_to_register">Click to Register</string>
     <string name="add_entry">Add Entry</string>
+    <string name="overall_progress">overall</string>
+    <string name="journal">journal</string>
+    <string name="voice_training">voicetraining</string>
 </resources>
