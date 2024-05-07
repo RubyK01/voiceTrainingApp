@@ -5,15 +5,17 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.WindowCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,10 +31,15 @@ import android.widget.TextView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings({"deprecation", "unchecked"})
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     FirebaseAuth auth;
     Button btnLogout, btnJournal, btnProgress;
@@ -50,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         btnJournal = findViewById(R.id.button_second);
         btnProgress = findViewById(R.id.button_third);
         user = auth.getCurrentUser();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String date = dateFormat.format(new Date());
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("WaitList");
+        String email = user.getEmail().replace(".",",");
 
         if (text != null) {
             binding.userDetails.setText("test");
@@ -92,48 +103,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
+        // I took the existing fab that came by default with the fragment template I started with
+        // and
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "You have been added to the wait list to see a Speech Therapist.", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+                dbRef.child(email).addValueEventListener(new ValueEventListener() {
+                    boolean clickedBefore = false;
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean onList = snapshot.child("onList").getValue(Boolean.class);
+                        if (snapshot.exists()){
+                            if(!clickedBefore) {
+                                if (onList != true) {
+                                    Map<String, Object> updateMap = new HashMap<>();
+                                    updateMap.put("date", date);
+                                    updateMap.put("onList", true);
+                                    dbRef.child(email.replace('.', ',')).setValue(updateMap);
+                                    Snackbar.make(view, "You have been added to the wait list to see a Speech Therapist.", Snackbar.LENGTH_LONG)
+                                            .setAnchorView(R.id.fab)
+                                            .setAction("Action", null).show();
+                                    clickedBefore = true;
+                                } else {
+                                    Snackbar.make(view, "You are already on the list to see a Speech Therapist.", Snackbar.LENGTH_LONG)
+                                            .setAnchorView(R.id.fab)
+                                            .setAction("Action", null).show();
+                                }
+                            }
+                        }
+                        else {
+                            // If the snapshot does not exist, assume the user is not on the list and add them
+                            Map<String, Object> updateMap = new HashMap<>();
+                            updateMap.put("date", date);
+                            updateMap.put("onList", true);
+                            dbRef.child(email.replace('.', ',')).setValue(updateMap);
+
+                            Snackbar.make(view, "You have been added to the wait list to see a Speech Therapist.", Snackbar.LENGTH_LONG)
+                                    .setAnchorView(R.id.fab)
+                                    .setAction("Action", null).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Snackbar.make(view, "Could not check wait list.", Snackbar.LENGTH_LONG)
+                                .setAnchorView(R.id.fab)
+                                .setAction("Action", null).show();
+                    }
+                });
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
     }
 }

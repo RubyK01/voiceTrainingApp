@@ -14,15 +14,20 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.Firebase;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Register extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword;
     Button btnRegister;
     FirebaseAuth mAuth;
+    DatabaseReference dbRef;
     ProgressBar progressBar;
     TextView text;
 
@@ -43,7 +48,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
-
+        dbRef = FirebaseDatabase.getInstance().getReference("WaitList");
         //https://www.youtube.com/watch?v=QAKq8UBv4GI
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -86,6 +91,7 @@ public class Register extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Register.this, "Account Created!",
                                             Toast.LENGTH_SHORT).show();
+                                    addToWaitList(email);
                                     Intent loginPage = new Intent(getApplicationContext(), Login.class);
                                     startActivity(loginPage);
                                     finish();
@@ -99,5 +105,12 @@ public class Register extends AppCompatActivity {
                         });
             }
         });
+    }
+    private void addToWaitList(String email){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String date = dateFormat.format(new Date());
+
+        WaitList waitList = new WaitList(date, false);
+        dbRef.child(email.replace(".",",")).setValue(waitList);
     }
 }

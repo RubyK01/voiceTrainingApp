@@ -79,7 +79,6 @@ public class JournalEdit extends AppCompatActivity {
     private void updateJournalEntry(DatabaseReference journalRef, String newEntryText, String newRating) {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("date", date);
-        updateMap.put("details", "Journal ID: " + id + " - Date: " + date + " - Rating: " + newRating);
         updateMap.put("email", user.getEmail());
         updateMap.put("entryText", newEntryText);
         updateMap.put("rating", newRating);
