@@ -16,7 +16,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -26,7 +25,7 @@ public class JournalEntry extends AppCompatActivity {
     //https://www.geeksforgeeks.org/how-to-build-a-simple-notes-app-in-android/
     //https://www.youtube.com/watch?v=td1jX_zDi5s
     FirebaseDatabase db = FirebaseDatabase.getInstance();
-    DatabaseReference dbRef, ref2;
+    DatabaseReference dbRef;
     FirebaseUser user;
     int entryID = 0;
     String date, email, id, idp1, idp2;
@@ -78,7 +77,7 @@ public class JournalEntry extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                System.out.println("Could not connect to firebase :c");
             }
         });
 

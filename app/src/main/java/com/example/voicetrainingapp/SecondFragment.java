@@ -74,7 +74,7 @@ public class SecondFragment extends Fragment {
             savedResults.setDate(date);
             savedResults.setEmail(email);
 
-            dbRef.child("frequencies").push().setValue(savedResults);
+            dbRef.push().setValue(savedResults);
             Toast.makeText(getContext(), "Results saved", Toast.LENGTH_SHORT).show();
         }
         else{
@@ -108,8 +108,6 @@ public class SecondFragment extends Fragment {
 
         TextView hzText = view.findViewById(R.id.hzText);
         TextView dBText = view.findViewById(R.id.dBText);
-        TextView hzAverageText = view.findViewById(R.id.hzText2);
-        TextView dBAverageText = view.findViewById(R.id.dBText2);
         TextView soundStage = view.findViewById(R.id.soundStage);
 
         recordButton.setOnClickListener(v -> {
@@ -178,25 +176,6 @@ public class SecondFragment extends Fragment {
 
                                 frequencyResults.add(roundedFrequency);
                                 decibalResults.add(roundedDB);
-                                double sumOfFrequencyResults = 0.0;
-                                double averageFrequencyResult = 0.0;
-                                double sumOfDBResults = 0.0;
-//                                if (currentRecordingCount ==1){
-//                                    for(int i =0; i < frequencyResults.size();i++){
-//                                        sumOfFrequencyResults = sumOfFrequencyResults + frequencyResults.get(i);
-//                                    }
-//                                    averageFrequencyResult = sumOfFrequencyResults / frequencyResults.size();
-//                                    hzAverageText.setText("Average hZ: "+averageFrequencyResult);
-//                                    sumOfFrequencyResults = firstSoundResults.get(0)+firstSoundResults.get(1)+firstSoundResults.get(2)
-//                                            +firstSoundResults.get(3);
-//                                    hzAverageText.setText("Average hZ: "+averageFrequencyResult);
-//
-//                                    sumOfDBResults = decibalResults.get(0)+decibalResults.get(1)+decibalResults.get(2);
-//                                    double averageDBResults = sumOfDBResults / decibalResults.size();
-//                                    dBAverageText.setText("Average hZ: "+averageDBResults);
-//
-//
-//                                }
                             }
                         }
                     }.start();

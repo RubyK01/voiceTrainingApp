@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     FirebaseAuth auth;
-    Button btnLogout, btnJournal;
+    Button btnLogout, btnJournal, btnProgress;
     FirebaseUser user;
     TextView text;
 
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         btnLogout = findViewById(R.id.logout);
         btnJournal = findViewById(R.id.button_second);
+        btnProgress = findViewById(R.id.button_third);
         user = auth.getCurrentUser();
 
         if (text != null) {
@@ -78,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent journalPage = new Intent(getApplicationContext(), Journal.class);
                 startActivity(journalPage);
+                finish();
+            }
+        });
+
+        btnProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent progressPage = new Intent(getApplicationContext(), OverallGraph.class);
+                startActivity(progressPage);
                 finish();
             }
         });

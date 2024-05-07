@@ -71,7 +71,7 @@ public class JournalEdit extends AppCompatActivity {
             String safeEmail = user.getEmail().replace('.', ',');
             dbRef = db.getReference(safeEmail);  // Only go up to the user level here
         } else {
-            Toast.makeText(this, "User not logged in or email unavailable.", Toast.LENGTH_LONG).show();
+            System.out.println("Could not connect to firebase :c");
             finish();
         }
     }

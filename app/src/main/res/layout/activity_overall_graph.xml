@@ -7,13 +7,12 @@
     android:orientation="vertical"
     tools:context=".OverallGraph">
 
-    <com.androidplot.PieChart
+    <com.androidplot.pie.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="10dp"
-        tools:ignore="MissingClass" />
+        android:padding="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Masculine"
+            android:id="@+id/mascText"
             android:textColor="@android:color/black"
             android:layout_marginStart="5dp"/>
 
@@ -43,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Feminine"
+            android:id="@+id/femText"
             android:textColor="@android:color/black"
             android:layout_marginStart="5dp"/>
 
@@ -56,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Androgynous"
+            android:id="@+id/androText"
             android:textColor="@android:color/black"
             android:layout_marginStart="5dp"/>
 
@@ -65,6 +67,7 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:text="Back" />
 
 </LinearLayout>
