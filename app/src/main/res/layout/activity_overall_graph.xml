@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +8,23 @@
     android:orientation="vertical"
     tools:context=".OverallGraph">
 
+    <TextView
+        android:id="@+id/chart_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Overall Progress"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:textColor="@android:color/holo_purple"/>
+
     <com.androidplot.pie.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="10dp" />
+        android:padding="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,42 +33,45 @@
         android:gravity="center">
 
         <View
-            android:layout_width="20dp"
+            android:layout_width="15dp"
             android:layout_height="20dp"
-            android:background="@color/color_masculine" />
+            android:background="@color/color_masculine"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Masculine"
             android:id="@+id/mascText"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp"
+            android:textSize="14sp"/>
 
         <View
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@color/color_feminine"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Feminine"
             android:id="@+id/femText"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp"
+            android:textSize="14sp"/>
 
         <View
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@color/color_androgynous"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Androgynous"
             android:id="@+id/androText"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp"
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
@@ -64,7 +79,7 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="Back" />
+        android:layout_marginStart="20dp"
+        android:text="Back"/>
 
 </LinearLayout>

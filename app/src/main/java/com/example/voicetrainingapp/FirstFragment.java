@@ -35,6 +35,10 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // https://stackoverflow.com/a/68049144
+        // How I learned to use image buttons
+        // https://stackoverflow.com/a/15117536
+        // How I got the images to scale to the button size
         Button btnLogout = view.findViewById(R.id.logout);
         ImageButton btnVoiceTraining = (ImageButton) view.findViewById(R.id.button_first);
         ImageButton btnJournal = (ImageButton) view.findViewById(R.id.button_second);
@@ -48,34 +52,36 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        // Button to take the user to the overall progress pie chart
         btnProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent progressPage = new Intent(getContext(), OverallGraph.class);
-                startActivity(progressPage);
-                getActivity().finish();
+                Intent progressPage = new Intent(getContext(), OverallGraph.class); //Name the intent set the destination
+                startActivity(progressPage); //Start the next activity
+                getActivity().finish(); //End the current activity
             }
         });
 
-        // Had an issue where when I would go back to the main screen the buttons other vocie training button wouldnt work
+        // Had an issue where when I would go back to the main screen the buttons other than the voice training button wouldn't work
         // Solved it by using a method from a stack overflow post that mentioned using context
         // https://stackoverflow.com/a/55459563
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() { // Button for when the user wants to signout
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent loginPage = new Intent(getContext(), Login.class);
-                startActivity(loginPage);
-                getActivity().finish();
+                Intent loginPage = new Intent(getContext(), Login.class); //Name the intent set the destination
+                startActivity(loginPage); //Start the next activity
+                getActivity().finish(); //End the current activity
             }
         });
 
+        // Button to take the user to the Journal screen
         btnJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent journalPage = new Intent(getContext(), Journal.class);
-                startActivity(journalPage);
-                getActivity().finish();
+                Intent journalPage = new Intent(getContext(), Journal.class); //Name the intent set the destination
+                startActivity(journalPage); //Start the next activity
+                getActivity().finish(); //End the current activity
             }
         });
     }

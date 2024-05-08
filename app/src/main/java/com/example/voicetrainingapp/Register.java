@@ -22,12 +22,17 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity {
+    // https://www.youtube.com/watch?v=QAKq8UBv4GI
+    // This register and login classes are based on the above video
+    // I have altered the register class to validate the inputs as well as
+    // create a field in firebase to see if the user is currently waiting to talk to a speech therapist
     TextInputEditText editTextEmail, editTextPassword;
     Button btnRegister;
     FirebaseAuth mAuth;
-    DatabaseReference dbRef;
+    DatabaseReference dbRef, dbRefDetails;
     ProgressBar progressBar;
     TextView text;
 
@@ -42,6 +47,45 @@ public class Register extends AppCompatActivity {
             finish();
         }
     }
+    private Boolean validDetails (String password, String email){
+        // I used a pattern to check if it the password contains a captial and lower case letter as well as a number
+        // https://stackoverflow.com/a/49515564
+        Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
+        Boolean validDetails = null;
+        if (email.isEmpty()) {
+            Toast.makeText(Register.this, "Email required.", Toast.LENGTH_SHORT).show();
+            validDetails = false;
+        }
+        else if (!email.contains("@") || !email.contains(".")) {
+            Toast.makeText(Register.this, "Invalid email format.", Toast.LENGTH_SHORT).show();
+            validDetails = false;
+        }
+        else if (password.isEmpty()) {
+            Toast.makeText(Register.this, "Password required.", Toast.LENGTH_SHORT).show();
+            validDetails = false;
+        }
+        else if (password.isEmpty() && email.isEmpty()) {
+            Toast.makeText(Register.this, "Fields cannot be empty.", Toast.LENGTH_SHORT).show();
+            validDetails = false;
+        }
+        else if (textPattern.matcher(password).matches() && password.length() >= 8) {
+            validDetails = true;
+        }
+        else {
+            validDetails = false;
+            Toast.makeText(Register.this, "Password not valid.", Toast.LENGTH_SHORT).show();
+        }
+        return validDetails;
+    }
+
+    private void addToWaitList(String email){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String date = dateFormat.format(new Date());
+
+        WaitList waitList = new WaitList(date, false);
+        dbRef.child(email.replace(".",",")).setValue(waitList);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,49 +112,29 @@ public class Register extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email, password, fName, lName;
+                String email, password;
                 email = editTextEmail.getText().toString();
                 password = editTextPassword.getText().toString();
 
-                if (email.isEmpty()){
-                    Toast.makeText(Register.this, "Email required.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else if (password.isEmpty()) {
-                    Toast.makeText(Register.this, "Password required.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //https://firebase.google.com/docs/auth/android/password-auth
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(Register.this, "Account Created!",
-                                            Toast.LENGTH_SHORT).show();
-                                    addToWaitList(email);
-                                    Intent loginPage = new Intent(getApplicationContext(), Login.class);
-                                    startActivity(loginPage);
-                                    finish();
-                                }
-                                else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Register.this, "Account not created.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                if(validDetails(password, email)) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    //https://firebase.google.com/docs/auth/android/password-auth
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressBar.setVisibility(View.GONE);
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Register.this, "Account Created!",
+                                        Toast.LENGTH_SHORT).show();
+                                addToWaitList(email);
+                                Intent loginPage = new Intent(getApplicationContext(), Login.class);
+                                startActivity(loginPage);
+                                finish();
                             }
-                        });
+                        }
+                    });
+                }
             }
         });
-    }
-    private void addToWaitList(String email){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        String date = dateFormat.format(new Date());
-
-        WaitList waitList = new WaitList(date, false);
-        dbRef.child(email.replace(".",",")).setValue(waitList);
     }
 }

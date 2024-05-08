@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // I took the existing fab that came by default with the fragment template I started with
-        // and
+        // and made it upon pressing it checks for the onList boolean in firebase to see if the user is on the list and returns the appropriate pop
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,13 +117,16 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boolean onList = snapshot.child("onList").getValue(Boolean.class);
                         if (snapshot.exists()){
+                            // I had an issue where if onList was false it would return the message for if it was true
+                            // To solve this I added a clicked before boolean to check in this instance has the fab been clicked before
+                            // If it hasnt been clicked before it will check if onList is false and if it is false say they have been added to the waitlist
                             if(!clickedBefore) {
                                 if (onList != true) {
                                     Map<String, Object> updateMap = new HashMap<>();
                                     updateMap.put("date", date);
                                     updateMap.put("onList", true);
                                     dbRef.child(email.replace('.', ',')).setValue(updateMap);
-                                    Snackbar.make(view, "You have been added to the wait list to see a Speech Therapist.", Snackbar.LENGTH_LONG)
+                                    Snackbar.make(view, "You've been added to the wait list for a speech therapist, expect an email soon!", Snackbar.LENGTH_LONG)
                                             .setAnchorView(R.id.fab)
                                             .setAction("Action", null).show();
                                     clickedBefore = true;

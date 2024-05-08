@@ -92,6 +92,8 @@ public class OverallGraph extends AppCompatActivity {
             }
         });
 
+        TextView chartTitle = findViewById(R.id.chart_title);
+        chartTitle.setText("Overall Progress");
         mascText = findViewById(R.id.mascText);
         femText = findViewById(R.id.femText);
         androText = findViewById(R.id.androText);
@@ -155,11 +157,15 @@ public class OverallGraph extends AppCompatActivity {
             HzChart.addSegment(androgynous, androFormatter);
 
             HzChart.redraw();
+            TextView chartTitle = findViewById(R.id.chart_title);
+            chartTitle.setText("Overall Progress");
             mascText.setText("Masculine: "+mascPercentage+"%");
             femText.setText("Feminine: "+femPercentage+"%");
             androText.setText("Androgynous: "+androPercentage+"%");
         }
         else{
+            TextView chartTitle = findViewById(R.id.chart_title);
+            chartTitle.setText("Overall Progress");
             mascText.setText("Masculine: 0%");
             femText.setText("Feminine: 0%");
             androText.setText("Androgynous: 0%");
