@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FrequencyAnalyzer {
+    // https://stackoverflow.com/questions/75409414/getting-frequencies-and-magnitudes-from-audio-sample-using-fft
     public List<Double> calculateFrequency(File audioFile) {
         List<Double> frequencies = new ArrayList<>();
         final int sampleRate = 44100;  // Sample rate in Hz

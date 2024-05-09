@@ -8,22 +8,32 @@
     android:orientation="vertical"
     tools:context=".OverallGraph">
 
+    <ImageView
+        android:id="@+id/banner_image"
+        android:layout_width="139dp"
+        android:layout_height="42dp"
+        android:contentDescription="@string/banner_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/banner"
+        tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/chart_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="Overall Progress"
         android:textAlignment="center"
+        android:textColor="@android:color/holo_purple"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:padding="10dp"
-        android:textColor="@android:color/holo_purple"/>
+        android:textStyle="bold" />
 
     <com.androidplot.pie.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@android:color/white"
         android:padding="10dp"/>
 
     <LinearLayout

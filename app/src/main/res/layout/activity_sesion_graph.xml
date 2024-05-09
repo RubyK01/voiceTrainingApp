@@ -6,10 +6,9 @@
     tools:context=".SesionGraph"
     xmlns:ap="http://schemas.androidplot.com/ap">
 
-    <!-- Graph View with adjusted width and alignment -->
     <com.androidplot.xy.XYPlot
-        style="@style/APDefacto.Light"
         android:id="@+id/sessionGraph"
+        style="@style/APDefacto.Light"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomLayout"

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         else{
-            binding.userDetails.setText(user.getEmail().toString());
+            binding.userDetails.setText("User: "+user.getEmail().toString());
         }
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

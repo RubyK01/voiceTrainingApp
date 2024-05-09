@@ -6,7 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Journal">
 
-    <!--Adding a ListView -->
+    <ImageView
+        android:id="@+id/banner_image"
+        android:layout_width="139dp"
+        android:layout_height="42dp"
+        android:contentDescription="@string/banner_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/banner"
+        tools:ignore="MissingConstraints" />
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="409dp"
@@ -17,7 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Adding a TextView -->
 
     <TextView
         android:id="@+id/textView2"

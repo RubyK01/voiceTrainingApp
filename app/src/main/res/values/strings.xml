@@ -66,4 +66,6 @@
     <string name="overall_progress">overall</string>
     <string name="journal">journal</string>
     <string name="voice_training">voicetraining</string>
+    <string name="banner">banner</string>
+    <string name="banner_description">banner</string>
 </resources>

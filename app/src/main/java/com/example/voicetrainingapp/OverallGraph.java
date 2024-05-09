@@ -67,7 +67,12 @@ public class OverallGraph extends AppCompatActivity {
                             System.out.println("Combined Array: "+frequencies);
                         }
 
-                        //Loop to sort the overall frequencies result to see if the voice is most masc, fem or andro.
+                        // Loop to sort the overall frequencies result to see if the frequency is in masc, fem or andro ranges.
+                        // https://prismaticspeech.com/services/tvt/
+                        // I based the ranges from the above link
+                        // "Masculine-perceived voices tend to fall in the 85-175 Hz range;
+                        // androgynous-perceived voices range from 123-247 Hz;
+                        // and feminine-perceived voices typically are between 147-294 Hz."
                         for (int i = 0; i < frequencies.size(); i++) {
                             if (frequencies.get(i) >= 85 && frequencies.get(i) <= 175) {
                                 mascCount++;
@@ -99,7 +104,8 @@ public class OverallGraph extends AppCompatActivity {
         androText = findViewById(R.id.androText);
 
         PieChart HzChart = findViewById(R.id.pie_chart);
-
+        HzChart.getBackgroundPaint().setColor(Color.WHITE);
+        chartTitle.setText("Overall Progress \n Please do voice training to show progress");
         //Default values I set
         int mascValue = 50;
         int femValue = 50;
@@ -133,6 +139,8 @@ public class OverallGraph extends AppCompatActivity {
     }
     private void updateChart(int mascCount, int femCount, int androCount, int total){
         PieChart HzChart = findViewById(R.id.pie_chart);
+        TextView chartTitle = findViewById(R.id.chart_title);
+        HzChart.getBackgroundPaint().setColor(Color.WHITE);
         HzChart.clear();
 
 
@@ -157,15 +165,14 @@ public class OverallGraph extends AppCompatActivity {
             HzChart.addSegment(androgynous, androFormatter);
 
             HzChart.redraw();
-            TextView chartTitle = findViewById(R.id.chart_title);
+
             chartTitle.setText("Overall Progress");
-            mascText.setText("Masculine: "+mascPercentage+"%");
-            femText.setText("Feminine: "+femPercentage+"%");
-            androText.setText("Androgynous: "+androPercentage+"%");
+            mascText.setText("Masculine: \n"+mascPercentage+"%");
+            femText.setText("Feminine: \n"+femPercentage+"%");
+            androText.setText("Androgynous: \n"+androPercentage+"%");
         }
         else{
-            TextView chartTitle = findViewById(R.id.chart_title);
-            chartTitle.setText("Overall Progress");
+            chartTitle.setText("Overall Progress \n Please do voice training to show progress");
             mascText.setText("Masculine: 0%");
             femText.setText("Feminine: 0%");
             androText.setText("Androgynous: 0%");

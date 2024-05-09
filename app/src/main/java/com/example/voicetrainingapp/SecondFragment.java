@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.voicetrainingapp.databinding.FragmentSecondBinding;
@@ -116,10 +118,12 @@ public class SecondFragment extends Fragment {
                     new CountDownTimer(16000, 1000) {
                         public void onTick(long millisUntilFinished) {
                             recordButton.setText("Recording: " + millisUntilFinished / 1000);
+                            recordButton.setEnabled(false);
                         }
 
                         public void onFinish() {
                             recordButton.setText("Start Recording");
+                            recordButton.setEnabled(true);
                             // Stop recording and process as necessary
                             if (isRecording) {
                                 audioRecorder.stopRecording();
@@ -148,16 +152,13 @@ public class SecondFragment extends Fragment {
                                     }
                                     soundStage.setText("Sound 3: Completed");
                                 }
-                                else{
-                                    // note for future ruby go figure how to reload the page.
-                                }
                                 System.out.println("First results: "+firstSoundResults);
                                 System.out.println("Second results: "+secondSoundResults);
                                 System.out.println("Third results: "+thirdSoundResults);
 
                                 double sum = 0;
                                 if (frequencies.isEmpty()) {
-                                    System.out.println("Error");
+                                    System.out.println("Error no frequencies");
                                 } else {
                                     sum = 0;
                                     for (double num : frequencies) {
@@ -169,10 +170,10 @@ public class SecondFragment extends Fragment {
                                 double averageFrequency = sum / frequencies.size();
                                 //Rounding the result to two decimal places
                                 Double roundedFrequency = Math.round(averageFrequency * 100.0) / 100.0;
-                                hzText.setText("Hz: " + roundedFrequency);
+                                hzText.setText("Average hZ: " + roundedFrequency);
                                 Double dB = 20 * Math.log10(averageFrequency);
                                 Double roundedDB = Math.round(dB * 100.0) / 100.0;
-                                dBText.setText("dB: " + roundedDB);
+                                dBText.setText("Average dB: " + roundedDB);
 
                                 frequencyResults.add(roundedFrequency);
                                 decibalResults.add(roundedDB);
@@ -190,7 +191,6 @@ public class SecondFragment extends Fragment {
                 requestRecordAudioPermission();
             }
         });
-
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() { // Button to go back to the home screen.
             @Override
@@ -236,4 +236,3 @@ public class SecondFragment extends Fragment {
                 RECORD_AUDIO_PERMISSION_REQUEST_CODE);
     }
 }
-
