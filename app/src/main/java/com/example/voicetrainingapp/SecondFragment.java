@@ -108,13 +108,16 @@ public class SecondFragment extends Fragment {
             // Optionally handle other initialization steps or close the activity
         }
 
+        // variables for the on screen text to be updated
         TextView hzText = view.findViewById(R.id.hzText);
         TextView dBText = view.findViewById(R.id.dBText);
         TextView soundStage = view.findViewById(R.id.soundStage);
 
+        // record button logic
         recordButton.setOnClickListener(v -> {
             if (checkRecordAudioPermission()) {
                 if (!isRecording) {
+                    isRecording = true;
                     new CountDownTimer(16000, 1000) {
                         public void onTick(long millisUntilFinished) {
                             recordButton.setText("Recording: " + millisUntilFinished / 1000);
@@ -170,10 +173,10 @@ public class SecondFragment extends Fragment {
                                 double averageFrequency = sum / frequencies.size();
                                 //Rounding the result to two decimal places
                                 Double roundedFrequency = Math.round(averageFrequency * 100.0) / 100.0;
-                                hzText.setText("Average hZ: " + roundedFrequency);
+                                hzText.setText("Average hZ: \n" + roundedFrequency);
                                 Double dB = 20 * Math.log10(averageFrequency);
                                 Double roundedDB = Math.round(dB * 100.0) / 100.0;
-                                dBText.setText("Average dB: " + roundedDB);
+                                dBText.setText("Average dB: \n" + roundedDB);
 
                                 frequencyResults.add(roundedFrequency);
                                 decibalResults.add(roundedDB);

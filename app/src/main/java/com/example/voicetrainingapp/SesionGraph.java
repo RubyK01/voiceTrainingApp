@@ -17,8 +17,9 @@ import com.androidplot.xy.XYSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-@SuppressWarnings({"deprecation", "unchecked"}) //To integrate Firebase I had to change SDK versions and some of of the code comes from depreciated version of
-//android plot so I have to surprises the above warningsfor it to work
+@SuppressWarnings({"deprecation", "unchecked"})
+//To integrate Firebase I had to change SDK versions and some of of the code comes from depreciated version of
+//android plot so I have to surprises the above warnings for it to work
 public class SesionGraph extends AppCompatActivity {
     //Variable to count how many times the view button is pressed in order to change how many results are visible
     private int viewCount = 0;

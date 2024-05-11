@@ -102,7 +102,9 @@ public class JournalEntry extends AppCompatActivity {
 
                             if(details.getEntryText().length() > 250) {
                                 Toast.makeText(JournalEntry.this, "Entrys cannot be greater than 250 character!", Toast.LENGTH_SHORT).show();
-                                return;
+                            }
+                            else if (details.getEntryText().length() == 0){
+                                Toast.makeText(JournalEntry.this, "Entrys must have text!", Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 dbRef.child(String.valueOf(entryID + 1) + "Journal").setValue(details);

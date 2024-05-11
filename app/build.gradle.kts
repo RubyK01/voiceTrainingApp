@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android") version "1.8.10"
     id("com.google.gms.google-services")
+//    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -58,6 +59,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.android.gms:play-services-tasks:17.2.1")
+
     // Firebase UI Library
     implementation("com.firebaseui:firebase-ui-auth:8.0.2")
     implementation("com.firebaseui:firebase-ui-database:8.0.2")
@@ -68,11 +71,25 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("junit:junit:4.12")
 
     //Testing
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.test:runner:1.4.0")
-    androidTestImplementation("androidx.test:rules:1.4.0")
+    // JUnit 4 for unit tests
+    implementation("junit:junit:4.13.2")
+
+
+// AndroidX Test Libraries (for instrumented tests)
+    implementation("androidx.test.ext:junit:1.1.5")
+    implementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("androidx.test.espresso:espresso-intents:3.5.1")
+    implementation("androidx.test.uiautomator:uiautomator:2.2.0")
+    implementation("androidx.test:runner:1.4.0")
+    implementation("androidx.test:rules:1.4.0")
+    implementation("androidx.test:core:1.5.0")
+
+//    implementation("org.robolectric:robolectric:4.7.3")
+
+// Mockito for unit tests
+    implementation("org.mockito:mockito-inline:4.11.0")
+
 }

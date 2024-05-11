@@ -32,9 +32,9 @@ public class AudioRecorder {
     private File outputFile;
 
     @SuppressLint("MissingPermission")//I do a permission check already in the SecondFragment class so I have suppressed the need for a check here
-    public void startRecording() { // https://stackoverflow.com/questions/34860767/android-audiorecord-failing-when-calling-the-startrecording-method
-        prepareFile();
-        if (audioRecord == null) {// If
+    public void startRecording() {
+        prepareFile(); //
+        if (audioRecord == null) {// If there no instance of audio record create one with the above settings
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT, BUFFER_SIZE);
         }
         audioRecord.startRecording();
@@ -65,7 +65,7 @@ public class AudioRecorder {
         outputFile = new File(outputDir, System.currentTimeMillis() + ".wav"); // I set the file name to the current
     }
 
-    public String getAudioFilePath() {
+    public String getAudioFilePath() {// Return the file path of the audio so that I can pass the file through the frequencyAnalyzer class
         if (outputFile != null) {
             return outputFile.getAbsolutePath();
         }
@@ -85,7 +85,7 @@ public class AudioRecorder {
                 }
                 fos.flush();
             } catch (IOException e) {
-                Log.e("AudioRecorder", "Error writing to file", e);
+                System.out.println("AudioRecorder error: "+e);
             }
         }
     }

@@ -23,13 +23,14 @@ public class JournalEdit extends AppCompatActivity {
     FirebaseDatabase db = FirebaseDatabase.getInstance();
     DatabaseReference dbRef;
     FirebaseUser user;
-    String date, email, id, entryText, rating;
+    String date, id, entryText, rating;
 
     private EditText editText;  // EditText for entry text
     private EditText ratingInput;  // EditText for rating
     // https://stackoverflow.com/questions/47366591/how-to-update-only-specific-field-on-firebase-database-on-android
+    // from the above I was able to workout the correct reference to update which would would be the journal id
+
     // https://stackoverflow.com/questions/44224083/how-to-update-child-with-new-fields-in-firebase-realtime-database
-    // https://stackoverflow.com/questions/47366591/how-to-update-only-specific-field-on-firebase-database-on-android
 
     //From the above stackoverflow threads I was able to construct away to update existing journal entrys which update in the database and thus on the journal page
     @Override
@@ -38,7 +39,7 @@ public class JournalEdit extends AppCompatActivity {
         setContentView(R.layout.activity_journal_edit);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("ID"); // This should exactly match the Firebase node key
+        id = intent.getStringExtra("ID");
         entryText = intent.getStringExtra("entryText");
         date = intent.getStringExtra("date");
         rating = intent.getStringExtra("rating");
@@ -63,8 +64,11 @@ public class JournalEdit extends AppCompatActivity {
                 Toast.makeText(JournalEdit.this, "Entrys cannot be greater than 250 character!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            DatabaseReference entryRef = dbRef.child(id);  // Directly use id from intent
-            updateJournalEntry(entryRef, editText.getText().toString().trim(), ratingInput.getText().toString().trim());
+            else if (editText.length() == 0){
+                Toast.makeText(JournalEdit.this, "Entrys must have text!", Toast.LENGTH_SHORT).show();
+            }
+            DatabaseReference entryRef = dbRef.child(id);  // Directly use id from intent as the reference to update the correct journal
+            updateJournalEntry(entryRef, editText.getText().toString(), ratingInput.getText().toString());//calling the update method with the new details
         });
     }
 
@@ -79,8 +83,9 @@ public class JournalEdit extends AppCompatActivity {
         }
     }
 
+    //Method to push the updated entry
     private void updateJournalEntry(DatabaseReference journalRef, String newEntryText, String newRating) {
-        Map<String, Object> updateMap = new HashMap<>();
+        Map<String, Object> updateMap = new HashMap<>(); //hashmap to hold updated values
         updateMap.put("date", date);
         updateMap.put("email", user.getEmail());
         updateMap.put("entryText", newEntryText);
