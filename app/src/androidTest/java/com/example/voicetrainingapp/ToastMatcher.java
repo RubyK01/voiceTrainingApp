@@ -6,7 +6,7 @@ import android.view.WindowManager;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-
+// https://stackoverflow.com/questions/28390574/checking-toast-message-in-android-espresso
 @SuppressWarnings({"deprecation", "unchecked"})
 public class ToastMatcher extends TypeSafeMatcher<Root> {
 
