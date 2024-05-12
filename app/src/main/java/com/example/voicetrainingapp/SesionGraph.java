@@ -85,10 +85,10 @@ public class SesionGraph extends AppCompatActivity {
         //https://www.tabnine.com/code/java/methods/com.androidplot.xy.XYPlot/setDomainBoundaries
         //Using Domain/Range Boundaries I can have the x & y axis go from 0 to 15 in seconds
         //and 0 from 255 in hz
-        plot.setDomainBoundaries(0, 15, BoundaryMode.FIXED);
-        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 3);
-        plot.setRangeBoundaries(85, 255, BoundaryMode.FIXED);
-        plot.setRangeStep(StepMode.INCREMENT_BY_VAL,25);
+        plot.setDomainBoundaries(0, 15, BoundaryMode.FIXED);//Set y values start to end
+        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 3);// how much y increases
+        plot.setRangeBoundaries(85, 255, BoundaryMode.FIXED);//Set x values start to end
+        plot.setRangeStep(StepMode.INCREMENT_BY_VAL,25);//how much x increases
         plot.redraw();
 
         Button viewButton = findViewById(R.id.viewButton);

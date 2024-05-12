@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android") version "1.8.10"
     id("com.google.gms.google-services")
-//    id("de.mannodermaus.android-junit5")
+    id("jacoco")
 }
 
 android {
@@ -27,6 +27,12 @@ android {
                 "proguard-rules.pro"
             )
         }
+        jacoco {
+            jacocoVersion = "0.8.7" // Specify the version of JaCoCo you want to use
+        }
+        debug {
+            isTestCoverageEnabled = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -34,6 +40,10 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+
+    buildFeatures{
+//        testCoverage = true
     }
 
     buildFeatures {
@@ -78,7 +88,7 @@ dependencies {
     implementation("junit:junit:4.13.2")
 
 
-// AndroidX Test Libraries (for instrumented tests)
+    // AndroidX Test Libraries
     implementation("androidx.test.ext:junit:1.1.5")
     implementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.test.espresso:espresso-intents:3.5.1")
@@ -87,9 +97,6 @@ dependencies {
     implementation("androidx.test:rules:1.4.0")
     implementation("androidx.test:core:1.5.0")
 
-//    implementation("org.robolectric:robolectric:4.7.3")
-
-// Mockito for unit tests
+    // Mockito for unit tests
     implementation("org.mockito:mockito-inline:4.11.0")
-
 }

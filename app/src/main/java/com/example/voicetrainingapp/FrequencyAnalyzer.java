@@ -20,10 +20,10 @@ public class FrequencyAnalyzer {
         final int bytesPerSecond = sampleRate * bytesPerSample * channelCount;
 
         // Fast Fourier Transforms
-
-        try (FileInputStream fis = new FileInputStream(audioFile)) { // try getting the file to calculate the frequencies off
-            byte[] buffer = new byte[bytesPerSecond]; // Byte buffer to read the file
-            // https://stackoverflow.com/a/29570220
+        // https://stackoverflow.com/a/29570220 - Where I learned to load the file into a byte buffer
+        // I wasnt able to recreate it with AudioFileInput so I used FileInputStream instead
+        try (FileInputStream fis = new FileInputStream(audioFile)) { // try getting the file that will be used to calculate the frequencies
+            byte[] buffer = new byte[bytesPerSecond]; // byte buffer to go through the file
 
             // I order the bytes from WAV file by little endian as WAV files themselves use this method of storing btyes.
             // Little Endian stores bytes by going smallest to largest
@@ -51,9 +51,11 @@ public class FrequencyAnalyzer {
 
                 // https://stackoverflow.com/a/7675171
                 // From the above I used as a basis on how to get the result of multiple frequencies
-                // The post covers one frequency when I want one for every second of the recording
+                // The post covers one frequency but I want one for every second of the recording
                 double maxMagnitude = 0;
-                int maxIndex = 1;  // start at 1 to ignore DC component
+                int maxIndex = 1;
+                // start at 1 to ignore DC component, the DC component is 0Hz which we do not care for
+                // https://dsp.stackexchange.com/a/12973
                 for (int i = 1; i < audioAsDouble.length / 2; i++) {
                     double re = audioAsDouble[2 * i]; // work real number
                     double im = audioAsDouble[2 * i + 1]; // work out imaginary number
@@ -66,6 +68,7 @@ public class FrequencyAnalyzer {
 
                 double frequency = maxIndex * (sampleRate / (double) audioAsDouble.length);
                 frequencies.add(frequency);
+                System.out.println(frequencies);
             }
         } catch (IOException e) {
             System.err.println("Error processing audio file: " + e.getMessage());

@@ -9,6 +9,15 @@
     android:padding="15dp"
     tools:context=".Register">
 
+    <ImageView
+        android:id="@+id/banner_image3"
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/banner_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/banner" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,6 +52,12 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Passwords can be 8 or more characters but must contain at least one capital letter and number." />
 
     <Button
         android:id="@+id/btnRegister"

@@ -35,18 +35,19 @@ public class JournalEntry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journalentry);
 
-        // Initialize UI components
+        // UI components
         Button submitBtn = findViewById(R.id.submitBtn);
         Button cancelBtn = findViewById(R.id.cancelBtn);
         EditText ratingValue = findViewById(R.id.rating);
         EditText entryValue = findViewById(R.id.editText);
 
-        // Initialize journal details
+        // Initialize journal details object
         details = new JournalDetails();
+        //Get current date in dd-mm-yyyy format
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         date = dateFormat.format(new Date());
 
-        // Ensure the Firebase user is not null and initialize database reference
+        // Making sure there is a user logged in so we can get the as a reference
         try {
             user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -56,7 +57,7 @@ public class JournalEntry extends AppCompatActivity {
                 Toast.makeText(this, "User not logged in. Redirecting to login screen.", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(this, Login.class));
                 finish();
-                return; // Important to stop further execution in this case
+                return;
             }
         } catch (Exception e) {
             Toast.makeText(this, "Failed to initialize database reference: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -67,7 +68,7 @@ public class JournalEntry extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    entryID = (int) snapshot.getChildrenCount();
+                    entryID = (int) snapshot.getChildrenCount();//check for the number of existing entries there are for the user so i can assign the correct id for the next entry
                     System.out.println("currently "+entryID+" exists for "+user.getEmail().toString());
                 }
                 else if(!snapshot.exists()){
@@ -97,12 +98,15 @@ public class JournalEntry extends AppCompatActivity {
                             details.setEntryText(entryValue.getText().toString());
                             idp1 = user.getEmail().toString();
                             idp2 = String.valueOf(entryID);
+                            //The child would look something like test@test.com0
                             id = idp1 + idp2;
                             details.setId(id);
 
+                            // if the entry is over 250 characters it is invalid
                             if(details.getEntryText().length() > 250) {
                                 Toast.makeText(JournalEntry.this, "Entrys cannot be greater than 250 character!", Toast.LENGTH_SHORT).show();
                             }
+                            // if the entry has no text it is not valid
                             else if (details.getEntryText().length() == 0){
                                 Toast.makeText(JournalEntry.this, "Entrys must have text!", Toast.LENGTH_SHORT).show();
                             }
@@ -114,12 +118,12 @@ public class JournalEntry extends AppCompatActivity {
                                 finish();
                             }
                         }
-                        else {
+                        else { //If the rating is not a number between 1 and 5 it is not valid
                             Toast.makeText(JournalEntry.this, "Rating must be a number between 1 - 5!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
-                    else{
+                    else{//If the rating is not a number between 1 and 5 it is not valid
                         Toast.makeText(JournalEntry.this, "Rating must be a number between 1 - 5!", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -132,6 +136,7 @@ public class JournalEntry extends AppCompatActivity {
             }
         });
 
+        //Cancel button for if a user changes there mind, goes back to the main journal screen
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

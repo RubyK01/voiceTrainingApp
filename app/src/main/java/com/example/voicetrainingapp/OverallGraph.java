@@ -52,7 +52,7 @@ public class OverallGraph extends AppCompatActivity {
                     };
                     if (user != null) { //Check if a user somehow got here without logging in
                         // https://stackoverflow.com/a/40367515
-                        // From the above I learned how to loop through each child in the base
+                        // From the above I learned how to loop through each child in the database
                         for (DataSnapshot freqSnapshot : snapshot.getChildren()) {
                             ArrayList<Long> firstSoundResults = freqSnapshot.child("firstSoundResults").getValue(x);
                             System.out.println("First Array: "+firstSoundResults);
@@ -74,11 +74,13 @@ public class OverallGraph extends AppCompatActivity {
                         // androgynous-perceived voices range from 123-247 Hz;
                         // and feminine-perceived voices typically are between 147-294 Hz."
                         for (int i = 0; i < frequencies.size(); i++) {
-                            if (frequencies.get(i) >= 85 && frequencies.get(i) <= 175) {
+                            if(frequencies.get(i) >= 85 && frequencies.get(i) <= 175) {
                                 mascCount++;
-                            } else if (frequencies.get(i) >= 147 && frequencies.get(i) <= 294) {
+                            }
+                            else if(frequencies.get(i) >= 147 && frequencies.get(i) <= 294) {
                                 femCount++;
-                            } else{
+                            }
+                            else{
                                 androCount++;
                             }
                         }

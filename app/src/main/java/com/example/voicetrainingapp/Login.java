@@ -101,11 +101,14 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
+                                String message;
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(getApplicationContext(),"Logged in!", Toast.LENGTH_SHORT).show();
-                                    Intent mainScreen = new Intent(getApplicationContext(), MainActivity.class);
+                                    message = "Logged in!";
+                                    Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
+                                    Intent mainScreen = new Intent(Login.this, MainActivity.class);
+                                    mainScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(mainScreen);
                                     finish();
                                 } else {

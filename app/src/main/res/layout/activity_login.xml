@@ -9,6 +9,15 @@
     android:padding="15dp"
     tools:context=".Login">
 
+    <ImageView
+        android:id="@+id/banner_image2"
+        android:layout_width="268dp"
+        android:layout_height="108dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/banner_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/banner" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

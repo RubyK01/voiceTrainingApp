@@ -5,6 +5,7 @@ import static android.content.Intent.getIntent;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -41,9 +42,11 @@ public class SecondFragment extends Fragment {
     DatabaseReference dbRef; // database reference
     FirebaseUser user; // variable containing user details e.g email
     private AudioRecorder audioRecorder;// Instance of AudioRecoder
+    MediaPlayer player;
     private static final int RECORD_AUDIO_PERMISSION_REQUEST_CODE = 123;
     private boolean isRecording = false;//Used to check if the microphone is recording
     FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();//Instance of frequencyAnalyzer
+    FrequencyAnalyzer testFrequencyAnalyzer = new FrequencyAnalyzer();//Instance of frequencyAnalyzer
     ArrayList<Double> frequencyResults = new ArrayList<Double>(); //ArrayList to hold the over all average as its the average of the three averages from the below arraylists.
     ArrayList<Double> firstSoundResults = new ArrayList<Double>(); //holds the frequencies for the first sound.
     ArrayList<Double> secondSoundResults = new ArrayList<Double>(); //holds the frequencies for the second sound.
@@ -58,6 +61,7 @@ public class SecondFragment extends Fragment {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         frequencyAnalyzer = new FrequencyAnalyzer(); // Initialize FrequencyAnalyzer class
         audioRecorder = new AudioRecorder();// Initialize AudioRecorder class
+        testFrequencyAnalyzer = new FrequencyAnalyzer();
         dbRef = FirebaseDatabase.getInstance().getReference();
         return binding.getRoot();
     }
@@ -90,6 +94,7 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Button recordButton = view.findViewById(R.id.recordButton);
+        Button explainButton = view.findViewById(R.id.explanationButton);
 
         try {
             user = FirebaseAuth.getInstance().getCurrentUser();
@@ -108,16 +113,34 @@ public class SecondFragment extends Fragment {
             // Optionally handle other initialization steps or close the activity
         }
 
+        // https://www.youtube.com/watch?v=0SJAK_pKUoE
+        // https://stackoverflow.com/a/34052313
+        // To solve the issue of context since i cant say SecondFragment.this since this is not a fragment
+        explainButton.setOnClickListener(new View.OnClickListener() { // plays explanation of how to use the voice training function
+            @Override
+            public void onClick(View v) {
+                if(player == null){
+                    player = MediaPlayer.create(getContext(),R.raw.explain);
+                    player.start();
+                }
+                else{
+                    player.release();
+                    player = null;
+                }
+            }
+        });
+
+
         // variables for the on screen text to be updated
         TextView hzText = view.findViewById(R.id.hzText);
         TextView dBText = view.findViewById(R.id.dBText);
         TextView soundStage = view.findViewById(R.id.soundStage);
 
+        // https://stackoverflow.com/questions/37027857/creating-a-button-to-start-audio-record-then-when-you-want-to-stop-the-audio-re
         // record button logic
         recordButton.setOnClickListener(v -> {
             if (checkRecordAudioPermission()) {
                 if (!isRecording) {
-                    isRecording = true;
                     new CountDownTimer(16000, 1000) {
                         public void onTick(long millisUntilFinished) {
                             recordButton.setText("Recording: " + millisUntilFinished / 1000);
@@ -133,12 +156,31 @@ public class SecondFragment extends Fragment {
                                 isRecording = false;
                                 //Grabbing the file path of the .wav that gets created.
                                 File audioFile = new File(audioRecorder.getAudioFilePath());
+                                //grabbing the test file
+                                File testFile = new File(audioRecorder.getTestAudioFilePath());
                                 //https://stackoverflow.com/questions/11701399/round-up-to-2-decimal-places-in-java
                                 //Sending the filepath into the frequency calculation method
                                 List<Double> frequencies = frequencyAnalyzer.calculateFrequency(audioFile);
-                                int currentRecordingCount = 0;
-                                currentRecordingCount++;
+                                System.out.println(audioFile);
+
+                                List<Double> testFrequencies = testFrequencyAnalyzer.calculateFrequency(testFile);
+                                System.out.println(testFile);
+                                System.out.println("Test frequencies: "+testFrequencies);
+
+                                // testing note from Ruby
+                                // For the purpose of testing the frequency analzyer class
+                                // replace where frequencies with testFrequencies is below so that the calulation is with the test file
+                                // files are called 150hztest.wav & 50hztest.wav
+                                // Links to where i got the files
+                                // https://www.youtube.com/watch?v=bslHKEh7oZk -50hz
+                                // https://www.youtube.com/watch?v=cZaJzjMexfM -150hz
+                                // on your android device please put them in the audioOutput folder that the audioRecorder class had created
+                                // I suggest emailing the files to yourself and then moving the files into the folder
+                                // in AudioRecorder line 68 change the file name to the one you want to test
+                                // also in this class at line
+
                                 //Getting the results of all the frequencies from each sound and saving it to an arraylist to send to the graph
+
                                 if (soundStage.getText().equals("Sound: ")){
                                     for (int i =0; i < frequencies.size(); i++){
                                         firstSoundResults.add(frequencies.get(i));
@@ -182,15 +224,18 @@ public class SecondFragment extends Fragment {
                                 decibalResults.add(roundedDB);
                             }
                         }
-                    }.start();
+                    }
+                    .start();
                     isRecording = true;
                     audioRecorder.startRecording();
-                } else {
+                }
+                else {
                     audioRecorder.stopRecording();
                     isRecording = false;
                     recordButton.setText("Start Recording");
                 }
-            } else {
+            }
+            else {
                 requestRecordAudioPermission();
             }
         });

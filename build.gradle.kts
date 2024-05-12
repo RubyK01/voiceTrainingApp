@@ -8,5 +8,6 @@ buildscript {
 //        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
         // The google-services plugin is required to parse the google-services.json file
         classpath ("com.google.gms:google-services:4.4.1")
+        classpath ("org.jacoco:org.jacoco.core:0.8.6")
     }
 }
